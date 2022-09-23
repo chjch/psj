@@ -1,0 +1,57 @@
+.pretty_container {
+    border-radius: 5px;
+    background-color: #2E3037;
+    margin: 10px;
+    padding: 25px;
+    position: relative;
+    box-shadow: 2px 2px 2px black;
+}
+
+body {
+    background-color: #2B2E33;
+    overflow: hidden; /* Hide scrollbars */
+}
+
+/*.navbar .navbar-brand{*/
+/*    margin-left:5% !important;*/
+/*}*/
+
+/* map style */
+.map_window {
+    height: 650px;
+    position: relative;
+}
+
+.dropdown {
+    margin-top: 20px;
+}
+
+.dropdown .Select-control {
+    background-color: rgb(34, 34, 34) !important;
+}
+
+.dropdown .Select-value {
+    border-color: #e3a700 !important;
+}
+
+.dropdown .Select-menu-outer {
+    background-color: rgb(34, 34, 34);
+}
+
+.dropdown .Select-value-label {
+    color: #fff !important;
+}
+
+.dropdown .VirtualizedSelectFocusedOption {
+    background-color: #a5ecd1;
+    color: black;
+}
+
+.dropdown .Select-control, .Select div, .is-open>.Select-control {
+    color: white;
+    border-color: slategray;
+}
+
+.is-focused:not(.is-open) > .Select-control {
+    border-color: slategray;
+}
