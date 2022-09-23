@@ -1,8 +1,12 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 import dash_deck
 import pydeck as pdk
 
-mapbox_api_token = open('./mapbox_token.txt', mode='r').read()
+load_dotenv()
+
+mapbox_api_token = os.getenv('MAPBOX_TOKEN')
 mapbox_style = 'mapbox://styles/chjch/cl7taqajn000x14mwr6915mcw'
 
 data_url = r"data/PSJ_Place_2019_od.csv"

@@ -1,8 +1,12 @@
+import os
+from dotenv import load_dotenv
 import dash_deck
 import pydeck as pdk
 import json
 
-mapbox_api_token = open('./mapbox_token.txt', mode='r').read()
+load_dotenv()
+
+mapbox_api_token = os.getenv("MAPBOX_TOKEN")
 mapbox_style = 'mapbox://styles/chjch/cl8d69pxo000m14mqbbttpqfa'
 
 data_url = r"./data/psj_bldg.geojson"
