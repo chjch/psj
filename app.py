@@ -38,6 +38,15 @@ building_map = html.Div(children=building_deck(),
                         id='building-map',
                         className='map_window')
 
+from terrain_deck import terrain_deck
+terrain_map = html.Div(children=[terrain_deck],
+                       id='terrain-map',
+                       className='map_window')
+
+from pointcloud_deck import point_cloud_deck
+point_cloud_map = html.Div(children=[point_cloud_deck],
+                           id='point-cloud-map',
+                           className='map_window')
 
 @app.callback(
     Output('commuter-map', 'children'),
@@ -61,6 +70,10 @@ def update_commuter_deck(selected_njob_option):
 def update_map(pathname):
     if pathname == "/3d-built-environment":
         return building_map
+    elif pathname == '/flood-risk-and-slr':
+        return terrain_map
+    elif pathname == '/lidar-point-cloud':
+        return point_cloud_map
     else:
         return commuter_map
 
