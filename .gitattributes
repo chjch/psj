@@ -1,1 +1,2 @@
 data/psj_lidar_80_31_colorized_wgs84_nav88m_filtered.csv filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
