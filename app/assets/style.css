@@ -19,7 +19,26 @@ body {
 /* map style */
 .map_window {
     height: 650px;
+    display: flex;
     position: relative;
+}
+
+.map_window a.external-link{
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    background-color: #ffa700;
+    border-radius: 1.5em;
+    color: #3d2900;
+    /*text-transform:uppercase;*/
+    text-decoration: none;
+    padding: 1em 1.5em;
+}
+
+a.external-link:hover {
+    background-color: #ffff60;
+    cursor: pointer;
+    color: black;
 }
 
 .dropdown {
@@ -54,4 +73,15 @@ body {
 
 .is-focused:not(.is-open) > .Select-control {
     border-color: slategray;
+}
+
+table, th, td {
+    border: 1px solid white;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }

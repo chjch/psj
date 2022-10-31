@@ -39,7 +39,5 @@ r = pdk.Deck(custom_layer,
              api_keys={'mapbox': MAPBOX_API_KEY}
              )
 
-r.to_html("terrain_layer.html")
-
 terrain_deck = dash_deck.DeckGL(r.to_json(), id="terrain-deck",
                                 mapboxKey=MAPBOX_API_KEY)

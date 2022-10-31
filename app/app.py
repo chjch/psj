@@ -1,10 +1,15 @@
-from dash import Dash, html, dcc, Input, Output, ctx
+import os
+import socket
+from dash import Dash, html, dcc, Input, Output
 import dash_bootstrap_components as dbc
 
 from navbar import navbar
 from commuter_deck import commuter_deck
 from commuter_panel import commuter_panel, njob_options
 from building_deck import building_deck
+from critical_asset_deck import icon_deck
+from terrain_deck import terrain_deck
+from pointcloud_deck import point_cloud_deck
 
 # external CSS stylesheets
 external_stylesheets = [
@@ -19,9 +24,17 @@ app = Dash(__name__,
 
 server = app.server
 
+IS_DEV = int(os.environ['PYCHARM_HOSTED'])
+
+if IS_DEV:
+    brand_href = 'http://127.0.0.1:8050/'
+else:
+    brand_href = socket.gethostbyname(socket.gethostname())
+
+
 app.layout = html.Div([
     dcc.Location(id='map-link'),
-    dbc.Row(navbar),
+    dbc.Row(navbar(brand_href)),
     dbc.Row(
         children=[dbc.Col(commuter_panel, width=3),
                   dbc.Col(html.Div(children=[],
@@ -38,15 +51,25 @@ building_map = html.Div(children=building_deck(),
                         id='building-map',
                         className='map_window')
 
-from terrain_deck import terrain_deck
 terrain_map = html.Div(children=[terrain_deck],
                        id='terrain-map',
                        className='map_window')
 
-from pointcloud_deck import point_cloud_deck
 point_cloud_map = html.Div(children=[point_cloud_deck],
                            id='point-cloud-map',
                            className='map_window')
+
+report_asset = html.A('Report An Asset',
+                      href='https://www.arcgis.com/apps/CrowdsourceReporter/'
+                           'index.html?appid=95373653e2fc4373be0d8b572f20e501',
+                      className='external-link',
+                      target='_blank')
+
+
+icon_map = html.Div(children=[icon_deck, report_asset],
+                    id='icon-map',
+                    className='map_window')
+
 
 @app.callback(
     Output('commuter-map', 'children'),
@@ -68,12 +91,14 @@ def update_commuter_deck(selected_njob_option):
     [Input("map-link", "pathname")]
 )
 def update_map(pathname):
-    if pathname == "/3d-built-environment":
-        return building_map
-    elif pathname == '/flood-risk-and-slr':
+    # if pathname == "/3d-built-environment":
+    #     return building_map
+    if pathname == '/flood-risk-and-slr':
         return terrain_map
     elif pathname == '/lidar-point-cloud':
         return point_cloud_map
+    elif pathname == '/critical-assets':
+        return icon_map
     else:
         return commuter_map
 

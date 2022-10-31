@@ -1,15 +1,9 @@
-import os
-from dotenv import load_dotenv
+import json
 import dash_deck
 import pydeck as pdk
-import json
 
-load_dotenv()
-
-mapbox_api_token = os.getenv("MAPBOX_TOKEN")
-mapbox_style = 'mapbox://styles/chjch/cl8d69pxo000m14mqbbttpqfa'
-
-data_url = r"./data/psj_bldg.geojson"
+from building_layer import building_layer
+from utils import *
 
 tooltip_html = '''
     <table>
@@ -35,40 +29,9 @@ tooltip_style = {
 }
 
 
-# modify the JSON data and bring properties one level upper
-def flatten_geojson_property(
-        json_dict: dict, key: str, add_comma: bool = False
-) -> dict:
-    for feature in json_dict['features']:
-        if add_comma:
-            feature[f'property_{key}'] = f"{feature['properties'][key]:,}"
-        else:
-            feature[f'property_{key}'] = feature['properties'][key]
-    return json_dict
-
-
 def building_deck():
-    fill_color_rgba = [235, 235, 235, 170]
-    line_color_rgba = [0, 0, 0, 255]
-
-    geojson_data = json.load(open(data_url))
-    geojson_layer = pdk.Layer(
-        "GeoJsonLayer",
-        data=geojson_data,
-        id='geojson',
-        opacity=1,
-        stroked=True,
-        filled=True,
-        extruded=True,
-        wireframe=True,
-        get_elevation="properties.fakefloors * 3",
-        get_fill_color=fill_color_rgba,
-        get_line_color=line_color_rgba,
-        pickable=True,
-        material=False,
-        tooltip=True
-    )
-
+    geojson_data = json.load(open(building_geojson))
+    geojson_layer = building_layer(geojson_data)
     # Set viewport to Downtown PSJ
     view_state = pdk.ViewState(
         latitude=29.805019, longitude=-85.298468,
@@ -79,7 +42,7 @@ def building_deck():
     r = pdk.Deck(
         layers=[geojson_layer],
         initial_view_state=view_state,
-        map_style=mapbox_style,
+        map_style=mapbox_style_building,
         api_keys={'mapbox': mapbox_api_token},
     )
 
