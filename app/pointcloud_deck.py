@@ -11,7 +11,7 @@ MAPBOX_API_KEY = os.getenv("MAPBOX_TOKEN")
 mapbox_style = 'dark'
 
 
-DATA_URL = "https://media.githubusercontent.com/media/chjch/psj/main/data/psj_lidar_80_31_colorized_wgs84_nav88m_filtered.csv"
+DATA_URL = "https://media.githubusercontent.com/media/chjch/psj/main/app/data/psj_lidar_80_31_colorized_wgs84_nav88m_filtered.csv"
 df = pd.read_csv(DATA_URL)
 
 point_cloud_layer = pdk.Layer(
