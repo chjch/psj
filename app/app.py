@@ -21,6 +21,7 @@ external_stylesheets = [
 app = Dash(__name__,
            external_stylesheets=external_stylesheets,
            suppress_callback_exceptions=True)
+app.title = 'Port St. Joe Dashboard'
 
 server = app.server
 
