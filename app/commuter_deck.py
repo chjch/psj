@@ -9,7 +9,7 @@ load_dotenv()
 mapbox_api_token = os.getenv('MAPBOX_TOKEN')
 mapbox_style = 'mapbox://styles/chjch/cl7taqajn000x14mwr6915mcw'
 
-data_url = r"https://media.githubusercontent.com/media/chjch/psj/main/data/PSJ_Place_2019_od.csv"
+data_url = r"https://media.githubusercontent.com/media/chjch/psj/main/app/data/PSJ_Place_2019_od.csv"
 njob_class = 'njob_class'  # column name contains number of jobs classes
 
 
