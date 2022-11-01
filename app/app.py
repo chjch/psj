@@ -24,7 +24,10 @@ app = Dash(__name__,
 
 server = app.server
 
-IS_DEV = int(os.environ['PYCHARM_HOSTED'])
+try:
+    IS_DEV = int(os.environ['PYCHARM_HOSTED'])
+except KeyError:
+    IS_DEV = 0
 
 if IS_DEV:
     brand_href = 'http://127.0.0.1:8050/'
