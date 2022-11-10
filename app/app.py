@@ -9,7 +9,7 @@ from commuter_panel import commuter_panel, njob_options
 from building_deck import building_deck
 from critical_asset_deck import icon_deck
 from terrain_deck import terrain_deck
-from pointcloud_deck import point_cloud_deck
+from tile3d_deck import tile3d_deck
 
 # external CSS stylesheets
 external_stylesheets = [
@@ -33,14 +33,16 @@ except KeyError:
 if IS_DEV:
     brand_href = 'http://127.0.0.1:8050/'
 else:
-    brand_href = socket.gethostbyname(socket.gethostname())
+    brand_href = socket.gethostname()
 
 
 app.layout = html.Div([
     dcc.Location(id='map-link'),
     dbc.Row(navbar(brand_href)),
     dbc.Row(
-        children=[dbc.Col(commuter_panel, width=3),
+        children=[dbc.Col(html.Div(children=commuter_panel,
+                                   id='commuter_panel'),
+                          width=3),
                   dbc.Col(html.Div(children=[],
                                    id='map-container',
                                    className='pretty_container'))],
@@ -59,7 +61,7 @@ terrain_map = html.Div(children=[terrain_deck],
                        id='terrain-map',
                        className='map_window')
 
-point_cloud_map = html.Div(children=[point_cloud_deck],
+point_cloud_map = html.Div(children=[tile3d_deck],
                            id='point-cloud-map',
                            className='map_window')
 
