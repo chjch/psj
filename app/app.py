@@ -33,7 +33,7 @@ except KeyError:
 if IS_DEV:
     brand_href = 'http://127.0.0.1:8050/'
 else:
-    brand_href = os.path.dirname(socket.gethostname())
+    brand_href = 'https://portstjoe.herokuapp.com/'
 
 
 app.layout = html.Div([
