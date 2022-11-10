@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 import pandas as pd
+# import requests
+# import json
 
 load_dotenv()
 # Import Mapbox API Key from environment
@@ -9,6 +11,8 @@ mapbox_style_building = 'mapbox://styles/chjch/cl8d69pxo000m14mqbbttpqfa'
 
 building_geojson = 'app/data/psj_bldg.geojson'
 critical_assets_geojson = 'app/data/psj_critical_infrastructure.geojson'
+
+cesium_token = os.getenv("CESIUM_TOKEN")
 
 
 def geojson_to_json_point(data_url, properties):
@@ -32,3 +36,12 @@ def flatten_geojson_property(
         else:
             feature[f'property_{key}'] = feature['properties'][key]
     return json_dict
+
+
+# def get_cesium_asset_token(asset_id):
+#     headers = {'Authorization': f'Bearer {cesium_token}'}
+#     response = requests.get(
+#         f'https://api.cesium.com/v1/assets/{asset_id}/endpoint',
+#         headers=headers
+#     )
+#     return json.loads(response.text)['accessToken']
