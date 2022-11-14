@@ -38,6 +38,10 @@ def flatten_geojson_property(
     return json_dict
 
 
+def cesium_tile_url(asset_id):
+    return f'https://assets.cesium.com/{asset_id}/tileset.json'
+
+
 # def get_cesium_asset_token(asset_id):
 #     headers = {'Authorization': f'Bearer {cesium_token}'}
 #     response = requests.get(
