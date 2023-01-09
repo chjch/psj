@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "portstjoe"
+  },
+  "targets": {
+    "portstjoe": {
+      "hosting": {
+        "resilientportstjoe": [
+          "portstjoe"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
