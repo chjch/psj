@@ -45,7 +45,8 @@ app.layout = html.Div([
                   dbc.Col(html.Div(children=[],
                                    id='map-container',
                                    className='pretty_container'))],
-        class_name='g-0 px-3')
+        class_name='g-0 px-3'
+    )
 ])
 
 commuter_map = html.Div(children=[],
@@ -109,4 +110,5 @@ def update_map(pathname):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=False, host="0.0.0.0",
+                   port=int(os.environ.get('PORT', 8080)))
