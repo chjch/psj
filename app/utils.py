@@ -39,7 +39,7 @@ def flatten_geojson_property(
 
 
 def cesium_tile_url(asset_id):
-    return f'https://assets.cesium.com/{asset_id}/tileset.json'
+    return f'https://assets.ion.cesium.com/{asset_id}/tileset.json'
 
 
 # def get_cesium_asset_token(asset_id):
