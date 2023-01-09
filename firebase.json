@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "site": "resilientportstjoe",
+    "public": "static",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "dashapp",
+          "region": "us-east1"
+        }
+      }
+    ]
+  }
+}
