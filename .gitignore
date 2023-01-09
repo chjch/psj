@@ -4,3 +4,5 @@ venv
 .env
 .idea/
 psj_lidar_80_31_colorized_wgs84_nav88m_filtered_initscale.csv
+.firebase/
+__pycache__/
