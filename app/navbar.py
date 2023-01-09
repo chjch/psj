@@ -26,7 +26,7 @@ def navbar(brand_href):
                                     ))
         ],
         brand='Resilient Port St. Joe',
-        brand_href=brand_href,
+        brand_href='/',
         color="#",
         fluid=True,
         dark=True,
