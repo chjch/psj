@@ -4,3 +4,9 @@
 .git/
 .gitignore
 __pycache__
+venv/
+.env
+icon_design/
+.firebase/
+.github/
+.DS_Store/
