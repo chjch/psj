@@ -3,4 +3,9 @@
 # files from your .gitignore file, remove the corresponding line below:
 .git
 .gitignore
+
+venv/
+icon_design/
+.env
+.github/
 #!include:.gitignore
