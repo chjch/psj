@@ -39,5 +39,32 @@ r = pdk.Deck(custom_layer,
              api_keys={'mapbox': MAPBOX_API_KEY}
              )
 
-terrain_deck = dash_deck.DeckGL(r.to_json(), id="terrain-deck",
+json_data = \
+{
+    "initialViewState": {
+        "bearing": 28,
+        "latitude": 29.805019,
+        "longitude": -85.298468,
+        "pitch": 55,
+        "zoom": 13
+    },
+    "layers": [
+        {
+            "@@type": "TileLayer",
+            "data": "https://tiles.arcgis.com/tiles/LBbVDC0hKPAnLRpO/arcgis/rest/services/psj_100_2070_int_high_depth_wgs84/MapServer/WMTS/tile/1.0.0/psj_100_2070_int_high_depth_wgs84/default/default028mm/{z}/{y}/{x}.png",
+            "id": "f260c4b8-4122-4877-a581-31a276af6135",
+            "opacity": 0.7
+        }
+    ],
+    "mapProvider": "mapbox",
+    "mapStyle": "mapbox://styles/mapbox/satellite-v9",
+    "views": [
+        {
+            "@@type": "MapView",
+            "controller": True
+        }
+    ]
+}
+
+terrain_deck = dash_deck.DeckGL(json_data, id="terrain-deck",
                                 mapboxKey=MAPBOX_API_KEY)

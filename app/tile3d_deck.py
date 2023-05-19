@@ -73,7 +73,7 @@ data = {
     ],
     "effects": [lighting_effect]
 }
-
+print(data)
 tile3d_deck = dash_deck.DeckGL(data,
                                id="tile3d-deck",
                                mapboxKey=mapbox_api_token)

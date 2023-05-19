@@ -1,70 +1,69 @@
 import os
-from dotenv import load_dotenv
 import pandas as pd
+import json
 
 import dash_deck
 from asset_points_layer import asset_points_layer
-from utils import (scn_tile_url, cesium_tile_url, cesium_token,
-                   road_json, bfp_json, asset_points_json)
+from utils import (
+    scn_tile_url,
+    cesium_tile_url,
+    cesium_token,
+    road_json,
+    bfp_json,
+)
 
-import json
-
-load_dotenv()
 
 MAPBOX_API_KEY = os.getenv("MAPBOX_TOKEN")  # import MAPBOX_API_KEY from .env
-roadmap = 'mapbox://styles/chjch/ckv84490t0hku14rzd7040xvt'
-satellite = 'mapbox://styles/mapbox/satellite-v9'
+roadmap = "mapbox://styles/chjch/clhush00j00se01p8gwdb7wrz"
+satellite = "mapbox://styles/mapbox/satellite-v9"
 
-CDK_LATITUDE = 29.136219
-CDK_LONGITUDE = -83.035895
+LATITUDE = 29.811019
+LONGITUDE = -85.303068
+BEARING = 21
+PITCH = 56
+ZOOM = 17
 
-# pdk.settings.custom_libraries = [
-#     {
-#         "libraryName": "MyTileLayerLibrary",
-#         "resourceUri": "https://cdn.jsdelivr.net/gh/agressin/pydeck_myTileLayer@master/dist/bundle.js",
-#     }
-# ]
-
+CESIUM_ASSET_ID = 1704927
 
 sun_light = {
-    "@@type": "DirectionalLight",
-    # "timestamp": 1554927200000,
-    "color": [128, 128, 0],
-    "intensity": 1,
+    "@@type": "_SunLight",
+    "timestamp": 1554987600000,
+    "color": [255, 255, 255],
+    "intensity": 2,
     "_shadow": True,
-    "direction": [-10, 10, -30]
+    # "direction": [2, 10, 20],
 }
 # ambient_light = {
 #     "@@type": "AmbientLight",
-#     # "intensity": 1,
-#     "color": [255, 0, 0]
-# }
-
-# camera_light = {
-#     "@@type": "_CameraLight",
 #     "intensity": 1,
-#     "color": [11, 11, 11]
+#     "color": [100, 100, 100]  # white
 # }
-
-point_light = {
-    "@@type": "PointLight",
-    # "timestamp": 1554927200000,
-    "color": [128, 128, 0],
+#
+camera_light = {
+    "@@type": "_CameraLight",
     "intensity": 1,
-    "position": [CDK_LONGITUDE, CDK_LATITUDE, 30]
+    "color": [11, 11, 11]
 }
+
+# point_light = {
+#     "@@type": "PointLight",
+#     # "timestamp": 1554927200000,
+#     "color": [128, 128, 128],
+#     "intensity": 2,
+#     "position": [LONGITUDE, LATITUDE, 30],
+# }
 
 lighting_effect = {
     "@@type": "LightingEffect",
-    "shadowColor": [0, 0, 0, 0.5],
+    "shadowColor": [100, 100, 100, 0.5],
     # "ambientLight": ambient_light,
-    # "cameraLight": camera_light,
-    "directionalLights": [sun_light],
-    "pointLights": [point_light]
+    "cameraLight": camera_light,
+    "sunLight": sun_light,
+    # "directionalLights": [sun_light],
+    # "pointLights": [point_light],
 }
 
-
-tooltip_transportation_html = '''
+tooltip_transportation_html = """
     <table>
         <tr>
             <td><strong>Asset Name</strong></td>
@@ -76,9 +75,9 @@ tooltip_transportation_html = '''
             <td>{Flood Depth (ft)}</td>
         </tr>
     </table>
-'''
+"""
 
-tooltip_housing_html = '''
+tooltip_housing_html = """
     <table>
         <tr>
             <td><strong>Asset Name</strong></td>
@@ -93,9 +92,9 @@ tooltip_housing_html = '''
             <td>{FF Flood Depth (ft)}</td>
         </tr>
     </table>
-'''
+"""
 
-tooltip_asset_html = '''
+tooltip_asset_html = """
     <table>
         <tr>
             <td><strong>Asset Name</strong></td>
@@ -110,50 +109,55 @@ tooltip_asset_html = '''
             <td>{Flood Depth (ft)}</td>
         </tr>
     </table>
-'''
-
+"""
 
 tooltip_style = {
     "font-size": "14px",
     "background-color": "rgba(255, 255, 255, 0.83)",
     "color": "black",
     "padding": "5px 5px 5px 5px",
-    "border-radius": "5px"
+    "border-radius": "5px",
 }
 
 
 def road_path_layer_data(scn, year):
     df = pd.read_json(road_json)[
-        ['Asset Name', 'Length (ft)',
-         f'{scn}_{year}', f'{scn}_{year}_color', 'path']
+        [
+            "Full Name",
+            "Length (ft)",
+            f"{scn}_{year}",
+            f"{scn}_{year}_color",
+            "path",
+        ]
     ]
-    df.rename(columns={f'{scn}_{year}': 'Flood Depth (ft)',
-                       f'{scn}_{year}_color': 'color'},
-              inplace=True)
-    df['Flood Depth (ft)'] = df['Flood Depth (ft)'].round(2)
-    return df.to_json(orient='records')
+    df.rename(
+        columns={
+            f"{scn}_{year}": "Flood Depth (ft)",
+            f"{scn}_{year}_color": "color",
+        },
+        inplace=True,
+    )
+    df["Flood Depth (ft)"] = df["Flood Depth (ft)"].round(2)
+    return df.to_json(orient="records")
 
 
 def bfp_data(scn, year):
     df = pd.read_json(bfp_json)[
-        ['Asset Name',
-         'First Floor Height (ft)',
-         f'{scn}_{year}',
-         'geometry']
+        ["Asset Name", "First Floor Height (ft)", f"{scn}_{year}", "geometry"]
     ]
     df.rename(
         columns={
             # 'First Floor Height (ft)': 'First Floor (FF) Height (ft)',
-            f'{scn}_{year}': 'FF Flood Depth (ft)'
+            f"{scn}_{year}": "FF Flood Depth (ft)"
         },
-        inplace=True
+        inplace=True,
     )
-    df['FF Flood Depth (ft)'] = df['FF Flood Depth (ft)'].round(2)
-    return df.to_json(orient='records')
+    df["FF Flood Depth (ft)"] = df["FF Flood Depth (ft)"].round(2)
+    return df.to_json(orient="records")
 
 
-def slr_scenario(pathname, scn_code, year, mapbox_style='Road map'):
-    if mapbox_style == 'Satellite':
+def slr_scenario(pathname, scn_code, year, mapbox_style="Road map"):
+    if mapbox_style == "Satellite":
         mb_style = satellite
     else:
         mb_style = roadmap
@@ -185,7 +189,7 @@ def slr_scenario(pathname, scn_code, year, mapbox_style='Road map'):
         "@@type": "MyTileLayer",
         "data": scn_tile_url(scn_code, year),
         "id": f"slr-tile-{scn_code}-{year}",
-        "opacity": 0.8
+        "opacity": 0.8,
     }
 
     bldg_3d_layer = {
@@ -193,23 +197,22 @@ def slr_scenario(pathname, scn_code, year, mapbox_style='Road map'):
         "id": "bldg-3d",
         "loader": "@@#CesiumIonLoader",
         "opacity": 1,
-        "data": cesium_tile_url(1635705),
+        "data": cesium_tile_url(CESIUM_ASSET_ID),
         "loadOptions": {
-            "cesium-ion": {
-                "accessToken": cesium_token
-            },
+            "cesium-ion": {"accessToken": cesium_token},
         },
         "pickable": False,
         "_subLayerProps": {
             "scenegraph": {
-                '_lighting': "pbr",
-                'getColor': [200, 220, 240, 220],
-                'material': {
-                    'ambient': 0, 'diffuse': 0,
-                    'specularColor': [255, 255, 255]
-                }
+                "_lighting": "pbr",
+                "getColor": [340, 340, 340, 300],
+                "material": {
+                    "ambient": 0.5,
+                    "diffuse": 0.5,
+                    "specularColor": [255, 255, 255],
+                },
             }
-        }
+        },
     }
 
     road_segment_layer = {
@@ -223,47 +226,47 @@ def slr_scenario(pathname, scn_code, year, mapbox_style='Road map'):
         "capRounded": True,
         "miterLimit": 1,
         "widthMinPixels": 1,
-        "widthScale": 5
+        "widthScale": 5,
     }
 
-    if pathname == '/transportation':
-        layers = [slr_tile_layer, road_segment_layer,
-                  asset_points_layer(scn_code, year, pathname)]
+    if pathname == "/transportation":
+        layers = [
+            slr_tile_layer,
+            road_segment_layer,
+            asset_points_layer(scn_code, year, pathname),
+        ]
         tooltip_html = tooltip_transportation_html
         mb_style = satellite
-    elif pathname == '/housing' or pathname == '/':
+    elif pathname == "/housing" or pathname == "/":
         layers = [slr_tile_layer, bldg_3d_layer, bfp_layer]
         tooltip_html = tooltip_housing_html
     else:
         layers = [
             slr_tile_layer,
             bfp_asset_layer,
-            asset_points_layer(scn_code, year, pathname)
+            asset_points_layer(scn_code, year, pathname),
         ]
         tooltip_html = tooltip_asset_html
 
     json_data = {
         "initialViewState": {
-            "bearing": 0,
-            "latitude": CDK_LATITUDE,
-            "longitude": CDK_LONGITUDE,
+            "bearing": BEARING,
+            "latitude": LATITUDE,
+            "longitude": LONGITUDE,
             "maxZoom": 18,
             "minZoom": 12,
-            "pitch": 60,
-            "zoom": 17
+            "pitch": PITCH,
+            "zoom": ZOOM,
         },
         "layers": layers,
         "mapProvider": "mapbox",
         "mapStyle": mb_style,
-        "views": [
-            {
-                "@@type": "MapView",
-                "controller": True
-            }
-        ],
+        "views": [{"@@type": "MapView", "controller": True}],
         # "effects": [lighting_effect]
     }
-    return dash_deck.DeckGL(json_data, id="terrain-deck",
-                            tooltip={"html": tooltip_html,
-                                     "style": tooltip_style},
-                            mapboxKey=MAPBOX_API_KEY)
+    return dash_deck.DeckGL(
+        json_data,
+        id="terrain-deck",
+        tooltip={"html": tooltip_html, "style": tooltip_style},
+        mapboxKey=MAPBOX_API_KEY,
+    )

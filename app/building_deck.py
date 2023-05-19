@@ -47,9 +47,9 @@ def building_deck():
     )
 
     # flatten GeoJSON data to create tooltip
-    flatten_geojson_property(geojson_data, 'Blockgroup')
-    flatten_geojson_property(geojson_data, 'fakefloors')
-    flatten_geojson_property(geojson_data, 'sqft', add_comma=True)
+    # flatten_geojson_property(geojson_data, 'Blockgroup')
+    # flatten_geojson_property(geojson_data, 'fakefloors')
+    # flatten_geojson_property(geojson_data, 'sqft', add_comma=True)
 
     return dash_deck.DeckGL(r.to_json(), id="building-deck",
                             mapboxKey=mapbox_api_token,
