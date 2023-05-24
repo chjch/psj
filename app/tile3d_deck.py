@@ -1,5 +1,5 @@
 import dash_deck
-from utils import cesium_token, mapbox_api_token, cesium_tile_url
+from utils import cesium_token, mapbox_token, cesium_tile_url
 
 mapbox_dark = 'mapbox://styles/mapbox/dark-v10'
 mapbox_streets = 'mapbox://styles/mapbox/streets-v11'
@@ -7,7 +7,7 @@ mapbox_satellite_street = 'mapbox://styles/mapbox/satellite-streets-v11'
 mapbox_satellite = 'mapbox://styles/mapbox/satellite-v9'
 mapbox_light = 'mapbox://styles/mapbox/light-v10'
 SURFACE_IMAGE = f"https://api.mapbox.com/v4/mapbox.satellite/" \
-                f"{{z}}/{{x}}/{{y}}@2x.png?access_token={mapbox_api_token}"
+                f"{{z}}/{{x}}/{{y}}@2x.png?access_token={mapbox_token}"
 
 
 ambient_light = {"@@type": "AmbientLight",
@@ -76,4 +76,4 @@ data = {
 print(data)
 tile3d_deck = dash_deck.DeckGL(data,
                                id="tile3d-deck",
-                               mapboxKey=mapbox_api_token)
+                               mapboxKey=mapbox_token)

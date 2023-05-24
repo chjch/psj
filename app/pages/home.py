@@ -29,22 +29,39 @@ layout = html.Div(
                 "text-align": "center",
                 "margin-left": "auto",
                 "margin-right": "auto",
-                "margin-bottom": "75px"
-            }
-        ),
-        html.Img(
-            src='../assets/image/fiber_head.png',
-            style={
-                "width": "220px",
-                "position": "absolute",
-                "top": "25px",
-                "left": "25px"
+                "margin-bottom": "70px"
             }
         ),
         dbc.Button(
             'GET STARTED',
             className='homebtn',
             href='/viewer/housing'
+        ),
+        html.Div(
+            children=[
+                html.Img(
+                    src='../assets/image/fiber_head.png',
+                    style={
+                        "width": "220px",
+                        # "position": "absolute",
+                    }
+                ),
+                html.Img(
+                    src='../assets/image/shimberg_head.png',
+                    style={
+                        "width": "170px",
+                        # "position": "absolute",
+                    }
+                ),
+                html.Img(
+                    src='../assets/image/conplan_head.png',
+                    style={
+                        "width": "200px",
+                        # "position": "absolute",
+                    }
+                ),
+            ],
+            className='home-logos'
         ),
         html.Div(
             children=[

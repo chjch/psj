@@ -43,7 +43,7 @@ def building_deck():
         layers=[geojson_layer],
         initial_view_state=view_state,
         map_style=mapbox_style_building,
-        api_keys={'mapbox': mapbox_api_token},
+        api_keys={'mapbox': mapbox_token},
     )
 
     # flatten GeoJSON data to create tooltip
@@ -52,7 +52,7 @@ def building_deck():
     # flatten_geojson_property(geojson_data, 'sqft', add_comma=True)
 
     return dash_deck.DeckGL(r.to_json(), id="building-deck",
-                            mapboxKey=mapbox_api_token,
+                            mapboxKey=mapbox_token,
                             tooltip={'html': tooltip_html,
                                      'style': tooltip_style}
                             )

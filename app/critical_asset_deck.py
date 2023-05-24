@@ -47,7 +47,7 @@ r = pdk.Deck(layers=[building_layer(building_geojson_data,
              initial_view_state=view_state,
              map_provider='mapbox',
              map_style=mapbox_style_building,
-             api_keys={'mapbox': mapbox_api_token})
+             api_keys={'mapbox': mapbox_token})
 
 tooltip_html = '''
     <table>
@@ -74,6 +74,6 @@ tooltip_style = {
 }
 
 icon_deck = dash_deck.DeckGL(r.to_json(), id="icon-deck",
-                             mapboxKey=mapbox_api_token,
+                             mapboxKey=mapbox_token,
                              tooltip={'html': tooltip_html,
                                       "style": tooltip_style})

@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import json
 
@@ -7,21 +6,22 @@ from asset_points_layer import asset_points_layer
 from utils import (
     scn_tile_url,
     cesium_tile_url,
+    mapbox_token,
     cesium_token,
     road_json,
     bfp_json,
 )
 
-
-MAPBOX_API_KEY = os.getenv("MAPBOX_TOKEN")  # import MAPBOX_API_KEY from .env
 roadmap = "mapbox://styles/chjch/clhush00j00se01p8gwdb7wrz"
 satellite = "mapbox://styles/mapbox/satellite-v9"
 
-LATITUDE = 29.811019
-LONGITUDE = -85.303068
-BEARING = 21
-PITCH = 56
-ZOOM = 17
+LATITUDE = 29.805312
+LONGITUDE = -85.298844
+BEARING = 5
+PITCH = 47
+ZOOM = 15.2
+MINZOOM = 12
+MAXZOOM = 18
 
 CESIUM_ASSET_ID = 1704927
 
@@ -66,10 +66,13 @@ lighting_effect = {
 tooltip_transportation_html = """
     <table>
         <tr>
-            <td><strong>Asset Name</strong></td>
-            <td>{Asset Name}</td>
+            <td><strong>Full Name</strong></td>
+            <td>{Full Name}</td>
         </tr>
-
+        <tr>
+            <td><strong>Length (ft)</strong></td>
+            <td>{Length (ft)}</td>
+        </tr>
         <tr>
             <td><strong>Flood Depth (ft)</strong></td>
             <td>{Flood Depth (ft)}</td>
@@ -156,12 +159,7 @@ def bfp_data(scn, year):
     return df.to_json(orient="records")
 
 
-def slr_scenario(pathname, scn_code, year, mapbox_style="Road map"):
-    if mapbox_style == "Satellite":
-        mb_style = satellite
-    else:
-        mb_style = roadmap
-
+def slr_scenario(pathname, scn_code, year, default_mb_style):
     bfp_layer = {
         "@@type": "GeoJsonLayer",
         "id": "bfp",
@@ -173,17 +171,17 @@ def slr_scenario(pathname, scn_code, year, mapbox_style="Road map"):
         "opacity": 0,
     }
 
-    bfp_asset_layer = {
-        "@@type": "GeoJsonLayer",
-        "id": "bfp",
-        "data": json.loads(bfp_data(scn_code, year)),
-        "stroked": False,
-        "filled": True,
-        "extruded": False,
-        "pickable": False,
-        "getFillColor": [150, 150, 150],
-        "opacity": 1,
-    }
+    # bfp_asset_layer = {
+    #     "@@type": "GeoJsonLayer",
+    #     "id": "bfp",
+    #     "data": json.loads(bfp_data(scn_code, year)),
+    #     "stroked": False,
+    #     "filled": True,
+    #     "extruded": False,
+    #     "pickable": False,
+    #     "getFillColor": [150, 150, 150],
+    #     "opacity": 1,
+    # }
 
     slr_tile_layer = {
         "@@type": "MyTileLayer",
@@ -236,25 +234,30 @@ def slr_scenario(pathname, scn_code, year, mapbox_style="Road map"):
             asset_points_layer(scn_code, year, pathname),
         ]
         tooltip_html = tooltip_transportation_html
-        mb_style = satellite
+        if not default_mb_style:
+            default_mb_style = "Satellite"
     elif pathname == "/housing" or pathname == "/":
         layers = [slr_tile_layer, bldg_3d_layer, bfp_layer]
         tooltip_html = tooltip_housing_html
     else:
         layers = [
             slr_tile_layer,
-            bfp_asset_layer,
+            # bfp_asset_layer,
             asset_points_layer(scn_code, year, pathname),
         ]
         tooltip_html = tooltip_asset_html
 
+    if default_mb_style == "Satellite":
+        mb_style = satellite
+    else:
+        mb_style = roadmap
     json_data = {
         "initialViewState": {
             "bearing": BEARING,
             "latitude": LATITUDE,
             "longitude": LONGITUDE,
-            "maxZoom": 18,
-            "minZoom": 12,
+            "maxZoom": MAXZOOM,
+            "minZoom": MINZOOM,
             "pitch": PITCH,
             "zoom": ZOOM,
         },
@@ -268,5 +271,5 @@ def slr_scenario(pathname, scn_code, year, mapbox_style="Road map"):
         json_data,
         id="terrain-deck",
         tooltip={"html": tooltip_html, "style": tooltip_style},
-        mapboxKey=MAPBOX_API_KEY,
+        mapboxKey=mapbox_token,
     )

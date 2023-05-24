@@ -26,7 +26,7 @@ chart_panels = dbc.Col(
             figure=line_chart(),
             id="line-chart",
             responsive=True,
-            hoverData={"points": [{"x": 2022, "customdata": ["MHHW"]}]},
+            hoverData={"points": [{"x": 2040, "customdata": ["CAT1"]}]},
             className="pretty_container",
             style={"height": "33vh"},
         ),
@@ -88,7 +88,7 @@ map_y_slider = html.Div(
                 step=None,
                 vertical=True,
                 marks=marks,
-                value=4,
+                value=3,  # CAT1
             ),
             style={"padding": "0px 0px 0px 0px"},
         ),
@@ -111,12 +111,14 @@ map_panel = dbc.Col(
                         ),
                         dcc.Dropdown(
                             ["Satellite", "Road map"],
-                            "Road map",
+                            # "Road map",
                             id="basemap-dropdown",
+                            placeholder="Choose a basemap",
+                            clearable=False,
                             style={
                                 "top": "25px",
                                 "left": "25px",
-                                "width": "40%",
+                                "width": "41%",
                                 "height": "30px",
                                 "position": "absolute",
                                 "z-index": 1,
@@ -201,17 +203,17 @@ def update_intro_msg(pathname):
 def update_line_chart(pathname):
     pathname = "/" + pathname.split("/")[-1]
     if pathname == "/housing":
-        return line_chart("overall")
+        return line_chart("HOUSING")
     elif pathname == "/critical-infrastructure":
-        return line_chart("infra")
+        return line_chart("CRITICAL INFRASTRUCTURE")
     elif pathname == "/transportation":
-        return line_chart("trans")
-    elif pathname == "/community-emergency-facilities":
-        return line_chart("comm")
+        return line_chart("TRANSPORTATION")
+    elif pathname == "/community-services":
+        return line_chart("CRITICAL COMMUNITY AND EMERGENCY FACILITIES")
     elif pathname == "/natural-cultural-resources":
-        return line_chart("resrc")
+        return line_chart("NATURAL, CULTURAL, AND HISTORICAL RESOURCES")
     elif pathname == "/local-economy":
-        return line_chart("economy")
+        return line_chart("ECONOMY")
     else:
         return line_chart("overall")
 
@@ -224,18 +226,18 @@ def update_bar_chart(hoverdata, pathname):
     pathname = "/" + pathname.split("/")[-1]
     year = hoverdata["points"][0]["x"]
     scenario = hoverdata["points"][0]["customdata"][0]
-    if pathname == "/overview":
-        return bar_chart("overall", scenario, year)
+    if pathname == "/housing":
+        return bar_chart("HOUSING", scenario, year)
     elif pathname == "/critical-infrastructure":
         return bar_chart("CRITICAL INFRASTRUCTURE", scenario, year)
     elif pathname == "/transportation":
         return bar_chart("TRANSPORTATION", scenario, year)
-    elif pathname == "/community-emergency-facilities":
-        return bar_chart("COMMUNITY SERVICES", scenario, year)
+    elif pathname == "/community-services":
+        return bar_chart("CRITICAL COMMUNITY AND EMERGENCY FACILITIES", scenario, year)
     elif pathname == "/natural-cultural-resources":
-        return bar_chart("NATURAL & CULTURAL RESOURCES", scenario, year)
+        return bar_chart("NATURAL, CULTURAL, AND HISTORICAL RESOURCES", scenario, year)
     elif pathname == "/local-economy":
-        return bar_chart("LOCAL ECONOMY", scenario, year)
+        return bar_chart("ECONOMY", scenario, year)
     else:
         return bar_chart("overall", scenario, year)
 
