@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "resilientportstjoe",
-    "public": "static",
+    "public": "app",
     "ignore": [
       "firebase.json",
       "**/.*",
