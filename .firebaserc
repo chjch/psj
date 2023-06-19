@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "portstjoe"
+    "default": "dcp-fiber"
   },
   "targets": {
-    "portstjoe": {
+    "dcp-fiber": {
       "hosting": {
-        "dashapp": [
-          "portstjoe"
+        "psjdash": [
+          "dcp-fiber"
         ]
       }
     }

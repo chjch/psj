@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "resilientportstjoe",
+    "site": "resilientpsj",
     "public": "app",
     "ignore": [
       "firebase.json",
@@ -11,8 +11,8 @@
       {
         "source": "**",
         "run": {
-          "serviceId": "dashapp",
-          "region": "us-central1"
+          "serviceId": "psjdash",
+          "region": "us-east1"
         }
       }
     ]
