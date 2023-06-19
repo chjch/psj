@@ -83,3 +83,203 @@ const addListeners = () => {
         sliderPopup(marks[i]);
     }
 };
+
+
+// const introTour = new Shepherd.Tour({
+//     defaultStepOptions: {
+//         classes: 'shepherd-theme-arrows',
+//         cancelIcon: {
+//             enabled: true
+//         },
+//     }
+// });
+//
+// introTour.addStep({
+//     'id': 'step1',
+//     'text': 'Welcome to the Flood Risk Explorer! This tool' +
+//         ' allows you to explore the impacts of sea level rise' +
+//         ' and storm surge on the City of Boston.' +
+//         'Click "Next" to continue.',
+//     'attachTo': {
+//         'element': '#intro-message',
+//         'on': 'bottom'
+//     },
+//     'buttons': [
+//         {
+//             'text': 'Next',
+//             'action': introTour.next
+//         }
+//     ]
+// });
+
+function createIntroTour() {
+    const introTour = new Shepherd.Tour({
+        useModalOverlay: true,
+        defaultStepOptions: {
+            classes: 'shepherd-theme-arrows',
+            cancelIcon: {
+                enabled: true
+            }
+        }
+    });
+
+    introTour.addStep({
+        id: 'step1',
+        title: 'Welcome to the Flood Risk Viewer!',
+        text: 'This tool' +
+            ' allows you to explore the impacts of sea level rise' +
+            ' and storm surge on the City of Port St. Joe.' +
+            ' Click "Next" to continue.',
+        buttons: [
+            {
+                text: 'Next',
+                action: introTour.next
+            }
+        ],
+    });
+
+    introTour.addStep({
+        id: 'step2',
+        title: 'Flood Risk by Asset Types',
+        text: 'Click these buttons to view potential flood depths' +
+            ' for a specific asset type.' +
+            ' The "Get Started" button on the welcome page directs' +
+            ' to <strong>HOUSING</strong> by default.',
+        attachTo: {
+            element: '#navbar-links-group',
+            on: 'bottom',
+        },
+        buttons: [
+            {
+                text: 'Next',
+                action: introTour.next
+            }
+        ],
+        floatingUIOptions: {
+            middleware: [window.FloatingUIDOM.offset({mainAxis: 20})]
+        }
+    });
+
+    introTour.addStep({
+        id: 'step3',
+        title: 'Pick a Scenario',
+        text: 'Choose a specifc scenario by dragging' +
+            ' the slider. <strong>Hover</strong> on an acronym to' +
+            ' see its full name.',
+        attachTo: {
+            element: '#map-y-slider',
+            on: 'left',
+        },
+        buttons: [
+            {
+                text: 'Next',
+                action: introTour.next
+            }
+        ],
+        floatingUIOptions: {
+            middleware: [window.FloatingUIDOM.offset({mainAxis: 20})]
+        }
+    });
+
+    introTour.addStep({
+        id: 'step4',
+        title: 'Pick a Year',
+        text: 'Choose a year to see specific scenario you selected' +
+            ' under that year. The default year is 2040.',
+        attachTo: {
+            element: '#map-x-slider',
+            on: 'top',
+        },
+        buttons: [
+            {
+                text: 'Next',
+                action: introTour.next
+            }
+        ],
+        floatingUIOptions: {
+            middleware: [window.FloatingUIDOM.offset({mainAxis: 20})]
+        }
+    });
+
+    introTour.addStep({
+        id: 'step5',
+        title: 'Value Statements',
+        text: 'Each asset type is associated with its respective' +
+            ' "Overview", "Challenges", and "Value" statements.' +
+            ' These statements reflect key points based on previous' +
+            ' taskforce and public meetings as well as research findings' +
+            ' <strong>Scroll-down</strong> to read more.',
+        attachTo: {
+            element: '#intro-message',
+            on: 'right',
+        },
+        buttons: [
+            {
+                text: 'Next',
+                action: introTour.next
+            }
+        ],
+        floatingUIOptions: {
+            middleware: [window.FloatingUIDOM.offset({mainAxis: 20})]
+        }
+    });
+
+    introTour.addStep({
+        id: 'step6',
+        title: 'Percent of Inundated Assets',
+        text: 'This chart provides an overview of the percentage of' +
+            ' inundated assets with the specific asset type is currently' +
+            ' under selection. Each line represents a specific (storm) scenario,' +
+            ' which follows the same acronyms as the vertical slider before.' +
+            ' <strong>Hover</strong> on a data point (any combination of year and scenario)' +
+            ' to see its value.' +
+            ' <strong>Single-click</strong> on a legend item to hide a scenario.' +
+            ' <strong>Double-click</strong> to show just that scenario.',
+        attachTo: {
+            element: '#line-chart',
+            on: 'right',
+        },
+        buttons: [
+            {
+                text: 'Next',
+                action: introTour.next
+            }
+        ],
+        floatingUIOptions: {
+            middleware: [window.FloatingUIDOM.offset({mainAxis: 20})]
+        }
+    });
+
+    introTour.addStep({
+        id: 'step7',
+        title: 'Flood Depth Classification',
+        text: 'This chart is in sync with the chart above.' +
+            ' When you <strong>Hover</strong> on a particular data point' +
+            ' above, it shows the percent of all the inundated assets' +
+            ' by flood depths divided into 6 classes.',
+        attachTo: {
+            element: '#bar-chart',
+            on: 'right',
+        },
+        buttons: [
+            {
+                text: 'FINISH',
+                action: introTour.next
+            }
+        ],
+        floatingUIOptions: {
+            middleware: [window.FloatingUIDOM.offset({mainAxis: 20})]
+        }
+    });
+
+    if (window.location.href.includes('viewer/housing')) {
+        // Initiate the tour
+        // introTour.start();
+        if(!sessionStorage.getItem('shepherd-tour')) {
+            introTour.start();
+            sessionStorage.setItem('shepherd-tour', 'yes');
+        }
+    }
+}
+
+// Usage:
