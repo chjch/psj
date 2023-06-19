@@ -66,11 +66,21 @@ def bar_chart(asset: str = 'HOUSING',
     # else:
     #     bar_df = class_df
     #     x_title = f"All critical assets (%) by flood depth"
-    fig = px.bar(bar_df, x='Flood depth', y=bar_trace, color='Asset Class',
-                 barmode='group', category_orders=category_orders,
-                 template='plotly_white',
-                 color_discrete_sequence=['#5289B0', '#AAB543', '#EA9731',
-                                          '#838383', '#F6C540', '#D05E33'])
+    fig = px.bar(
+        bar_df, x='Flood depth', y=bar_trace, color='Asset Class',
+        barmode='group', category_orders=category_orders,
+        template='plotly_white',
+        color_discrete_map={
+            'HOUSING': '#0E3183',
+            'TRANSPORTATION': '#0E3183',
+            'CRITICAL INFRASTRUCTURE': '#0E3183',
+            'CRITICAL COMMUNITY AND EMERGENCY FACILITIES': '#0E3183',
+            'NATURAL, CULTURAL, AND HISTORICAL RESOURCES': '#0E3183',
+            'ECONOMY': '#0E3183'
+        },
+        # color_discrete_sequence=['#5289B0', '#AAB543', '#EA9731',
+        #                                   '#838383', '#F6C540', '#D05E33']
+    )
     fig.update_yaxes(range=[-1, 103],
                      title=None)
     fig.update_xaxes(title=x_title)

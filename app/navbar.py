@@ -1,18 +1,24 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
-NAVBAR_LOGO = "/assets/image/seagrantuf.png"
+NAVBAR_LOGO = "/assets/image/UFlogo.png"
 NAVBAR_BRAND_TITLE = "Resilient Port St. Joe"
 
 navbar_brand = html.A(
     # Use row and col to control vertical alignment of logo / brand
     dbc.Row(
         [
-            dbc.Col(html.Img(src=NAVBAR_LOGO, height="40px")),
-            dbc.Col(dbc.NavbarBrand(NAVBAR_BRAND_TITLE,
-                                    className="ms-2",
-                                    style={"font-size": "1.6em",
-                                           "padding-left": "20px"})),
+            dbc.Col(html.Img(src=NAVBAR_LOGO, height="45px")),
+            dbc.Col(dbc.NavbarBrand(
+                NAVBAR_BRAND_TITLE,
+                className="ms-2",
+                style={
+                    "font-size": "1.6em",
+                    "font-family": "poppins",
+                    "padding-left": "20px",
+                    "color": "#0E3183",
+                }
+            )),
         ],
         align="center",
         className="g-0",
@@ -25,10 +31,13 @@ navbar_brand = html.A(
 def navbar_link(name: str, href: str):
     return dbc.Col(
         dbc.Button(
-            name, color="primary",
+            name,
+            # color="primary",
+            # active=True,
             id=f"{name.replace(' ', '').lower()}-button",
             href=f'/viewer/{href}',
-            className="ms-2 rounded-pill btn", n_clicks=0,
+            className="ms-2 rounded-pill btn",
+            n_clicks=0,
         ),
         width="auto",
     )
@@ -48,16 +57,20 @@ tourist_link = navbar_link('Local Economy',
                            'local-economy')
 
 navbar_right = dbc.Row(
-    [
-        overview_link,
-        transport_link,
-        housing_link,
-        community_link,
-        resource_link,
-        tourist_link
-    ],
-    className="g-0 ms-auto flex-nowrap mt-3 mt-md-0",
-    align="center",
+    dbc.Row(
+        children=[
+            overview_link,
+            transport_link,
+            housing_link,
+            community_link,
+            resource_link,
+            tourist_link
+        ],
+        className="g-0 flex-nowrap mt-3 mt-md-0",
+        id="navbar-links-group"
+    ),
+    className="ms-auto",
+    # align="center",
 )
 
 navbar = dbc.Navbar(
