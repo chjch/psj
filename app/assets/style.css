@@ -68,12 +68,13 @@ a.basemap-roadmap {
 }
 
 #basemap-dropdown .Select-menu-outer {
-    background-color: #0021A5;
-    width: 40%;
+    background-color: #0E3183;
+    width: 41%;
     height: inherit;
     top: 60px;
-    left: 25px;
+    right: 25px;
     opacity: 1 !important;
+    cursor: pointer;
 }
 
 #basemap-dropdown .Select-value-label {
@@ -81,7 +82,7 @@ a.basemap-roadmap {
 }
 
 #basemap-dropdown .VirtualizedSelectFocusedOption {
-    background-color: #FA4616;
+    background-color: #4E9BEE;
     color: #ffffff;
     width: 40%;
 }
@@ -118,19 +119,25 @@ th, td {
 .popup {
     display: block;
     position: absolute;
-    padding: 0px 0px 0px 0px;
-    font-family: Verdana, sans-serif;
+    padding: 2px 6px;
+    font-family: sans-serif;
     font-size: 0.9em;
-    background-color: #ffa700;
-    border: 1px solid #ccc;
+    background-color: #0E3183;
+    color: #ffffff;
+    border: 2px solid #ffffff;
     border-radius: 5px
 }
 
 .btn {
     padding: 7px 12px;
     font-size: 14px;
+    background-color: #0E3183;
+    color: white;
 }
 
+.btn:hover {
+    background-color: #4E9BEE;
+}
 
 .homebtn {
     padding: 10px 25px;
@@ -139,7 +146,7 @@ th, td {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    color: #555555;
+    color: #313131;
 }
 
 .homebtn:hover {
@@ -152,7 +159,7 @@ th, td {
 
 .home-logos {
     display: inline-block;
-    height: 60px;
+    height: 120px;
     margin-top: 70px;
 }
 
@@ -166,4 +173,45 @@ th, td {
 
 .home-logos img:last-child {
     margin-right: 0px;
+}
+
+/*slider color*/
+
+.rc-slider-track {
+    background-color: #0E3183;
+}
+
+.rc-slider-dot-active {
+    border-color: #0E3183;
+    /*border: solid 2px red;*/
+}
+
+.rc-slider-handle {
+    /*background-color: #0E3183;*/
+    /*border-color: #0E3183;*/
+    border: solid 3px #0E3183;
+    width: 15px;
+    height: 15px;
+    /*box-shadow: 0 0 2px 2px rgba(0,0,0,0.12);*/
+
+}
+
+.rc-slider-handle:hover {
+    border-color: #0E3183;
+}
+
+.rc-slider-handle-active:active {
+    border-color: #0E3183;
+}
+
+.rc-slider-handle:focus {
+    border-color: #0E3183;
+}
+
+.shepherd-button {
+    color: white;
+}
+
+.btn-primary.active {
+    background-color: #4E9BEE; /* Update with your desired active background color */
 }
