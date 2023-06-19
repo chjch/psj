@@ -40,23 +40,23 @@ layout = html.Div(
         html.Div(
             children=[
                 html.Img(
-                    src='../assets/image/fiber_head.png',
+                    src='../assets/image/FDEP_transparent.png',
                     style={
-                        "width": "220px",
+                        # "width": "30%",
                         # "position": "absolute",
                     }
                 ),
                 html.Img(
-                    src='../assets/image/shimberg_head.png',
+                    src='../assets/image/PSJ_transparent.png',
                     style={
-                        "width": "170px",
+                        # "width": "170px",
                         # "position": "absolute",
                     }
                 ),
                 html.Img(
-                    src='../assets/image/conplan_head.png',
+                    src='../assets/image/FRC_transparent.png',
                     style={
-                        "width": "200px",
+                        # "width": "200px",
                         # "position": "absolute",
                     }
                 ),

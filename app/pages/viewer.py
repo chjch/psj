@@ -47,15 +47,21 @@ map_x_slider = html.Div(
             "Projection Year",
             style={
                 "width": "200px",
-                "font-size": "1.2em",
+                "font-family": "Poppins",
+                # "font-size": "1.2em",
                 "padding": "0px 0px 0px 50px",
+                "color": "#0E3183",
             },
         ),
         html.Div(
             dcc.Slider(
                 id="map-x-slider",
                 step=None,
-                marks={2022: "2022", 2040: "2040", 2070: "2070"},
+                marks={
+                    2022: {'label': "2022", 'style': {"color": "#0E3183"}},
+                    2040: {'label': "2040", 'style': {"color": "#0E3183"}},
+                    2070: {'label': "2070", 'style': {"color": "#0E3183"}}
+                },
                 value=2040,
             ),
             style={
@@ -68,19 +74,25 @@ map_x_slider = html.Div(
 )
 
 marks = {
-    1: "MHHW",
-    2: "NFHL100",
-    3: "CAT1",
-    4: "CAT2",
-    5: "CAT3",
-    6: "CAT5",
+    1: {'label': "MHHW", 'style': {"color": "#0E3183"}},
+    2: {'label': "NFHL100", 'style': {"color": "#0E3183"}},
+    3: {'label': "CAT1", 'style': {"color": "#0E3183"}},
+    4: {'label': "CAT2", 'style': {"color": "#0E3183"}},
+    5: {'label': "CAT3", 'style': {"color": "#0E3183"}},
+    6: {'label': "CAT5", 'style': {"color": "#0E3183"}},
 }
+
 
 map_y_slider = html.Div(
     [
         html.Div(
             "Scenario",
-            style={"font-size": "1.2em", "padding": "30px 0px 0px 0px"},
+            style={
+                # "font-size": "1.1em",
+                "font-family": "Poppins",
+                "padding": "30px 0px 0px 0px",
+                "color": "#0E3183",
+            },
         ),
         html.Div(
             dcc.Slider(
@@ -115,9 +127,10 @@ map_panel = dbc.Col(
                             id="basemap-dropdown",
                             placeholder="Choose a basemap",
                             clearable=False,
+                            searchable=False,
                             style={
                                 "top": "25px",
-                                "left": "25px",
+                                "right": "25px",
                                 "width": "41%",
                                 "height": "30px",
                                 "position": "absolute",
@@ -126,11 +139,11 @@ map_panel = dbc.Col(
                         ),
                         html.Img(
                             id="map-legend",
-                            src="../assets/image/map-legend.png",
+                            src=None,
                             style={
                                 "bottom": "70px",
                                 "left": "45px",
-                                "width": "10%",
+                                "width": "15%",
                                 "height": "auto",
                                 "position": "absolute",
                                 "z-index": 1,
@@ -162,6 +175,13 @@ def layout(asset_type=None):
     )
 
 
+@callback(Output("housing-button", "active"), Input("sub-path", "pathname"))
+def update_housing_button_status(pathname):
+    pathname = "/" + pathname.split("/")[-1]
+    if pathname == "/housing":
+        return True
+
+
 @callback(
     Output("map-container", "children"),
     [
@@ -175,9 +195,30 @@ def update_map(pathname, x_value, y_value, basemap):
     pathname = "/" + pathname.split("/")[-1]
     if pathname == "/viewer":
         pathname = "/"
-        return slr_scenario(pathname, marks[y_value], x_value, basemap)
+        return slr_scenario(
+            pathname,
+            marks[y_value]['label'],
+            x_value,
+            basemap
+        )
     else:
-        return slr_scenario(pathname, marks[y_value], x_value, basemap)
+        return slr_scenario(
+            pathname,
+            marks[y_value]['label'],
+            x_value,
+            basemap
+        )
+
+
+@callback(Output("map-legend", "src"), Input("sub-path", "pathname"))
+def update_housing_button_status(pathname):
+    pathname = "/" + pathname.split("/")[-1]
+    if pathname == "/transportation":
+        return "../assets/image/legend_flood_depth_roads.png"
+    if pathname == "/housing":
+        return "../assets/image/legend_flood_depth_tile.png"
+    else:
+        return "../assets/image/legend_flood_depth_allother.png"
 
 
 @callback(Output("intro-message", "children"), [Input("sub-path", "pathname")])
@@ -214,8 +255,6 @@ def update_line_chart(pathname):
         return line_chart("NATURAL, CULTURAL, AND HISTORICAL RESOURCES")
     elif pathname == "/local-economy":
         return line_chart("ECONOMY")
-    else:
-        return line_chart("overall")
 
 
 @callback(
@@ -227,19 +266,47 @@ def update_bar_chart(hoverdata, pathname):
     year = hoverdata["points"][0]["x"]
     scenario = hoverdata["points"][0]["customdata"][0]
     if pathname == "/housing":
-        return bar_chart("HOUSING", scenario, year)
+        return bar_chart(
+            "HOUSING",
+            scenario,
+            year
+        )
     elif pathname == "/critical-infrastructure":
-        return bar_chart("CRITICAL INFRASTRUCTURE", scenario, year)
+        return bar_chart(
+            "CRITICAL INFRASTRUCTURE",
+            scenario,
+            year
+        )
     elif pathname == "/transportation":
-        return bar_chart("TRANSPORTATION", scenario, year)
+        return bar_chart(
+            "TRANSPORTATION",
+            scenario,
+            year
+        )
     elif pathname == "/community-services":
-        return bar_chart("CRITICAL COMMUNITY AND EMERGENCY FACILITIES", scenario, year)
+        return bar_chart(
+            "CRITICAL COMMUNITY AND EMERGENCY FACILITIES",
+            scenario,
+            year
+        )
     elif pathname == "/natural-cultural-resources":
-        return bar_chart("NATURAL, CULTURAL, AND HISTORICAL RESOURCES", scenario, year)
+        return bar_chart(
+            "NATURAL, CULTURAL, AND HISTORICAL RESOURCES",
+            scenario,
+            year
+        )
     elif pathname == "/local-economy":
-        return bar_chart("ECONOMY", scenario, year)
+        return bar_chart(
+            "ECONOMY",
+            scenario,
+            year
+        )
     else:
-        return bar_chart("overall", scenario, year)
+        return bar_chart(
+            "overall",
+            scenario,
+            year
+        )
 
 
 # add callback for toggling the collapse on small screens
