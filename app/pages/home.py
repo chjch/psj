@@ -19,9 +19,8 @@ layout = html.Div(
         ),
         html.Div(
             children='''
-                A Dashboard to explore the impacts of compound flooding with
-                different storm events under different sea-level rise
-                scenarios.
+                Use this dashboard to explore the impacts of different storm
+                events and sea-level rise scenarios.
             ''',
             style={
                 "color": "white",
@@ -75,9 +74,9 @@ layout = html.Div(
                 ),
                 html.Div(
                     children='''
-                        The data and maps in this tool illustrate the scale of
-                        potential flooding, not the exact location, and do not
-                        account for erosion, subsidence, or future
+                        The data and maps in this tool illustrate the potential
+                        scale and extent of flooding, not the exact location;
+                        they do not account for erosion, subsidence, or future
                         construction.
                         Although every effort has been made to ensure that
                         information is comprehensive and accurate, errors and
