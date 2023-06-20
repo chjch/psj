@@ -203,11 +203,11 @@ function createIntroTour() {
 
     introTour.addStep({
         id: 'step5',
-        title: 'Value Statements',
-        text: 'Each asset type is associated with its respective' +
-            ' "Overview", "Challenges", and "Value" statements.' +
-            ' These statements reflect key points based on previous' +
-            ' taskforce and public meetings as well as research findings' +
+        title: 'Overview, Challenges, and Value',
+        text: 'Learn about the types of structures and assets analyzed ' +
+            ' in Port St. Joe, and the challenges facing the city.' +
+            ' Also, read about the values that will guide the city’s ' +
+            ' resilience and flood risk reduction strategies.' +
             ' <strong>Scroll-down</strong> to read more.',
         attachTo: {
             element: '#intro-message',
