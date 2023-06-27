@@ -61,6 +61,7 @@ a.basemap-roadmap {
 
 #basemap-dropdown .Select-control {
     background-color: rgb(255, 255, 255) !important;
+    min-width: 200px;
 }
 
 #basemap-dropdown .Select-value {
@@ -75,6 +76,7 @@ a.basemap-roadmap {
     right: 25px;
     opacity: 1 !important;
     cursor: pointer;
+    min-width: 200px;
 }
 
 #basemap-dropdown .Select-value-label {
@@ -85,6 +87,7 @@ a.basemap-roadmap {
     background-color: #4E9BEE;
     color: #ffffff;
     width: 40%;
+    min-width: 200px;
 }
 
 #basemap-dropdown .Select-control, .Select div, .is-open>.Select-control {
@@ -214,4 +217,117 @@ th, td {
 
 .btn-primary.active {
     background-color: #4E9BEE; /* Update with your desired active background color */
+}
+
+/* basic positioning */
+.legend {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    font-family: Poppins;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.35);;
+}
+
+.legend li {
+    float: left;
+    /* margin-left: 20px; */
+    margin-bottom: 10px;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
+
+.legend span {
+    /* border: 1px solid #ccc; */
+    float: left;
+    width: 25px;
+    height: 12px;
+    margin-right: 15px;
+}
+
+/* your colors */
+.legend .tile-level1 {
+    background-color: #FFF5B3;
+}
+
+.legend .tile-level2 {
+    background-color: #D2EFA5;
+}
+
+.legend .tile-level3 {
+    background-color: #B2E1B6;
+}
+
+.legend .tile-level4 {
+    background-color: #64C3BF;
+}
+
+.legend .tile-level5 {
+    background-color: #2CA1C2;
+}
+
+.legend .tile-level6 {
+    background-color: #216DAF;
+}
+
+.legend .tile-level7 {
+    background-color: #252A8A;
+}
+
+.legend .tile-level8 {
+    background-color: #081D2B;
+}
+
+.legend .road-level1 {
+    background-color: #FFFF00;
+}
+
+.legend .road-level2 {
+    background-color: #FFAA00;
+}
+
+.legend .road-level3 {
+    background-color: #CD6699;
+}
+
+.legend .road-level4 {
+    background-color: #8400A8;
+}
+
+.legend .road-level5 {
+    background-color: #002673;
+}
+
+.legend .asset-level1 {
+    background-color: #FFFF73;
+}
+
+.legend .asset-level2 {
+    background-color: #FFEBAF;
+}
+
+.legend .asset-level3 {
+    background-color: #FFAA00;
+}
+
+.legend .asset-level4 {
+    background-color: #FF5500;
+}
+
+.legend .asset-level5 {
+    background-color: #A80000;
+}
+
+.legend .asset-level6 {
+    background-color: #730000;
+}
+
+.legend .asset-level7 {
+    background-color: #48000C;
+}
+
+.legend .asset-level8 {
+    background-color: #000000;
 }
