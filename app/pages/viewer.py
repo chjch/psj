@@ -1,6 +1,8 @@
 import dash
-from dash import html, dcc, callback, Input, Output, State
+from dash import html, dcc, callback, Input, Output, State, no_update
 import dash_bootstrap_components as dbc
+from plotly.graph_objects import Layout
+from plotly.validator_cache import ValidatorCache
 
 from navbar import navbar
 from slr_deck import slr_scenario
@@ -23,19 +25,20 @@ chart_panels = dbc.Col(
             style={"height": "25vh", "overflow": "auto"},
         ),
         dcc.Graph(
-            figure=line_chart(),
+            # figure={},
             id="line-chart",
             responsive=True,
-            hoverData={"points": [{"x": 2040, "customdata": ["CAT1"]}]},
+            hoverData=None,
             className="pretty_container",
+            config={'displayModeBar': False},
             style={"height": "33vh"},
         ),
         dcc.Graph(
-            figure=bar_chart(),
+            # figure={},
             id="bar-chart",
             responsive=True,
             className="pretty_container",
-            style={"height": "27vh"},
+            style={"height": "28vh"},
         ),
     ],
     width=4,
@@ -63,6 +66,7 @@ map_x_slider = html.Div(
                     2070: {'label': "2070", 'style': {"color": "#0E3183"}}
                 },
                 value=2040,
+                persistence=True,
             ),
             style={
                 "padding": "7px 25px 0px 0px",
@@ -101,12 +105,59 @@ map_y_slider = html.Div(
                 vertical=True,
                 marks=marks,
                 value=3,  # CAT1
+                persistence=True,
             ),
             style={"padding": "0px 0px 0px 0px"},
         ),
     ],
     className="vstack gap-2",
     style={"height": "100%", "position": "relative"},
+)
+
+map_legend = html.Div(
+    children=[],
+    id="map-legend",
+    className="legend",
+)
+
+map_legend_toast = html.Div(
+    [
+        dbc.Button(
+            "Show Legend",
+            id="legend-toast-toggle",
+            color="primary",
+            style={
+                "margin-bottom": "5px",
+                "text-transform": "none",
+                "width": "100%",
+                "font-family": "Sans-Serif",
+            },
+            # className="mb-3",
+            n_clicks=0,
+        ),
+        dbc.Toast(
+            [map_legend],
+            id="legend-toast",
+            header="",
+            header_style={
+                "font-size": "13.5px",
+                "font-family": "Sans-Serif",
+                "font-weight": "bold",
+                "margin-right": "0px"
+            },
+            # icon="primary",
+            dismissable=False,
+            is_open=False,
+        ),
+    ],
+    style={
+        "bottom": "70px",
+        "left": "45px",
+        "width": "17%",
+        "height": "auto",
+        "position": "absolute",
+        "z-index": 1,
+    },
 )
 
 # map dbc column
@@ -137,18 +188,7 @@ map_panel = dbc.Col(
                                 "z-index": 1,
                             },
                         ),
-                        html.Img(
-                            id="map-legend",
-                            src=None,
-                            style={
-                                "bottom": "70px",
-                                "left": "45px",
-                                "width": "15%",
-                                "height": "auto",
-                                "position": "absolute",
-                                "z-index": 1,
-                            },
-                        ),
+                        map_legend_toast
                     ],
                     className="pretty_container",
                 ),
@@ -210,15 +250,51 @@ def update_map(pathname, x_value, y_value, basemap):
         )
 
 
-@callback(Output("map-legend", "src"), Input("sub-path", "pathname"))
-def update_housing_button_status(pathname):
+@callback(
+    [Output("map-legend", "children"), Output("legend-toast", "header")],
+    [Input("sub-path", "pathname")]
+)
+def update_legend(pathname):
     pathname = "/" + pathname.split("/")[-1]
     if pathname == "/transportation":
-        return "../assets/image/legend_flood_depth_roads.png"
-    if pathname == "/housing":
-        return "../assets/image/legend_flood_depth_tile.png"
+        return [
+            html.Li([html.Span(className="road-level1"), "0.1 - 0.5 ft"]),
+            html.Li([html.Span(className="road-level2"), "0.51 - 1 ft"]),
+            html.Li([html.Span(className="road-level3"), "1.1 - 1.5 ft"]),
+            html.Li([html.Span(className="road-level4"), "1.51 - 2 ft"]),
+            html.Li([html.Span(className="road-level5"), "> 2 ft"]),
+        ], "Depth of road flooding"
+    elif pathname == "/housing":
+        return [
+            html.Li([html.Span(className="tile-level1"), "0.1 - 0.5 ft"]),
+            html.Li([html.Span(className="tile-level2"), "0.51 - 1 ft"]),
+            html.Li([html.Span(className="tile-level3"), "1.1 - 3 ft"]),
+            html.Li([html.Span(className="tile-level4"), "3.1 - 6 ft"]),
+            html.Li([html.Span(className="tile-level5"), "6.1 - 9 ft"]),
+            html.Li([html.Span(className="tile-level6"), "9.1 - 18 ft"]),
+            html.Li([html.Span(className="tile-level7"), "18.1 - 27 ft"]),
+            html.Li([html.Span(className="tile-level8"), "> 27 ft"])
+        ], "Depth of flooding"
     else:
-        return "../assets/image/legend_flood_depth_allother.png"
+        return [
+            html.P(
+                "Based on First Floor Elevation (FFE) or "
+                "relevant level to asset",
+                style={
+                    "text-align": "left",
+                    "font-family": "Sans-Serif",
+                    "font-size": "11px"
+                },
+            ),
+            html.Li([html.Span(className="asset-level1"), "0.1 - 0.5 ft"]),
+            html.Li([html.Span(className="asset-level2"), "0.51 - 1 ft"]),
+            html.Li([html.Span(className="asset-level3"), "1.1 - 3 ft"]),
+            html.Li([html.Span(className="asset-level4"), "3.1 - 6 ft"]),
+            html.Li([html.Span(className="asset-level5"), "6.1 - 9 ft"]),
+            html.Li([html.Span(className="asset-level6"), "9.1 - 18 ft"]),
+            html.Li([html.Span(className="asset-level7"), "18.1 - 27 ft"]),
+            html.Li([html.Span(className="asset-level8"), "> 27 ft"])
+        ], "Depth of asset flooding"
 
 
 @callback(Output("intro-message", "children"), [Input("sub-path", "pathname")])
@@ -240,31 +316,45 @@ def update_intro_msg(pathname):
         return intro_msg("overall")
 
 
-@callback(Output("line-chart", "figure"), [Input("sub-path", "pathname")])
-def update_line_chart(pathname):
+@callback(
+    Output("line-chart", "figure"),
+    [Input("sub-path", "pathname"), Input("map-y-slider", "value")]
+)
+def update_line_chart(pathname, y_value):
     pathname = "/" + pathname.split("/")[-1]
     if pathname == "/housing":
-        return line_chart("HOUSING")
+        return line_chart("HOUSING", marks[y_value]['label'],)
     elif pathname == "/critical-infrastructure":
-        return line_chart("CRITICAL INFRASTRUCTURE")
+        return line_chart("CRITICAL INFRASTRUCTURE", marks[y_value]['label'],)
     elif pathname == "/transportation":
-        return line_chart("TRANSPORTATION")
+        return line_chart("TRANSPORTATION", marks[y_value]['label'],)
     elif pathname == "/community-services":
-        return line_chart("CRITICAL COMMUNITY AND EMERGENCY FACILITIES")
+        return line_chart("CRITICAL COMMUNITY AND EMERGENCY FACILITIES", marks[y_value]['label'],)
     elif pathname == "/natural-cultural-resources":
-        return line_chart("NATURAL, CULTURAL, AND HISTORICAL RESOURCES")
+        return line_chart("NATURAL, CULTURAL, AND HISTORICAL RESOURCES", marks[y_value]['label'],)
     elif pathname == "/local-economy":
-        return line_chart("ECONOMY")
+        return line_chart("ECONOMY", marks[y_value]['label'],)
 
 
 @callback(
     Output("bar-chart", "figure"),
-    [Input("line-chart", "hoverData"), Input("sub-path", "pathname")],
+    [
+        Input("line-chart", "hoverData"),
+        Input("sub-path", "pathname"),
+        Input("map-y-slider", "value"),
+        Input("map-x-slider", "value"),
+    ],
 )
-def update_bar_chart(hoverdata, pathname):
+def update_bar_chart(hoverdata, pathname, y_value, x_value):
     pathname = "/" + pathname.split("/")[-1]
-    year = hoverdata["points"][0]["x"]
-    scenario = hoverdata["points"][0]["customdata"][0]
+    if hoverdata is None:
+        scenario = marks[y_value]['label'],
+        scenario = scenario[0]
+        year = x_value,
+        year = year[0]
+    else:
+        year = hoverdata["points"][0]["x"]
+        scenario = hoverdata["points"][0]["customdata"][0]
     if pathname == "/housing":
         return bar_chart(
             "HOUSING",
@@ -301,12 +391,42 @@ def update_bar_chart(hoverdata, pathname):
             scenario,
             year
         )
+
+
+@callback(
+    Output("line-chart", "hoverData"),
+    [
+        Input("map-y-slider", "value"),
+        Input("map-x-slider", "value"),
+    ],
+)
+def update_line_hover_data(y_value, x_value):
+    if x_value or y_value:
+        return None
+
+
+@callback(
+    Output("legend-toast", "is_open"),
+    [Input("legend-toast-toggle", "n_clicks")],
+)
+def open_toast(n):
+    if n == 0:
+        return no_update
+    if n % 2 == 0:
+        return False
     else:
-        return bar_chart(
-            "overall",
-            scenario,
-            year
-        )
+        return True
+
+
+@callback(
+    Output("legend-toast-toggle", "children"),
+    [Input("legend-toast", "is_open")]
+)
+def change_toggle_text(is_open):
+    if is_open:
+        return "Hide Legend"
+    else:
+        return "Show Legend"
 
 
 # add callback for toggling the collapse on small screens
