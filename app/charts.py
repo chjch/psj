@@ -1,48 +1,39 @@
 import pandas as pd
 import plotly.express as px
 
-depth_df = pd.read_csv("app/data/psj_all_assets_flooded.csv")
-class_df = pd.read_csv("app/data/psj_all_assets_depth.csv")
+from utils import (
+    flooded_csv,
+    flooded_by_depth_csv,
+    asset_axis_title,
+    line_color_map
+)
 
-asset_dict = {
-    'CRITICAL COMMUNITY AND EMERGENCY FACILITIES': "Community Services",
-    'CRITICAL INFRASTRUCTURE': "Critical Infrastructure",
-    'NATURAL, CULTURAL, AND HISTORICAL RESOURCES': "Natural & Cultural Resources",
-    'TRANSPORTATION': "Transportation",
-    'ECONOMY': "Local Economy",
-    'HOUSING': "Housing"
-}
+flooded_df = pd.read_csv(flooded_csv)
+flooded_by_depth_df = pd.read_csv(flooded_by_depth_csv)
 
-category_orders = {
-    'Asset Class':
-        [
-            'HOUSING',
-            'TRANSPORTATION',
-            'CRITICAL INFRASTRUCTURE',
-            'CRITICAL COMMUNITY AND EMERGENCY FACILITIES',
-            'NATURAL, CULTURAL, AND HISTORICAL RESOURCES',
-            'ECONOMY'
-        ]
-}
+color_map = {}
 
 
-def line_chart(asset: str = 'HOUSING'):
-    partial_df = depth_df[depth_df['asset'] == asset]
-    fig = px.line(partial_df, x="year", y="percent", color='scenario',
-                  symbol='scenario', template='plotly_white',
-                  custom_data=['scenario'],
-                  color_discrete_sequence=px.colors.qualitative.Plotly)
+def line_chart(asset, scenario):
+    partial_df = flooded_df[flooded_df['asset'] == asset]
+    global color_map
+    color_map = line_color_map('G10', scenario, 0.2)
+    fig = px.line(
+        partial_df, x="year", y="percent", color='scenario',
+        symbol='scenario', template='plotly_white',
+        custom_data=['scenario'],
+        color_discrete_map=color_map
+    )
     fig.update_xaxes(
         ticktext=["2022", "2040", "2070"],
         tickvals=[2022, 2040, 2070],
         title=None
     )
-    fig.update_yaxes(range=[-1, 101],
-                     title='Assets inundated (%)')
+    fig.update_yaxes(
+        range=[-1, 101],
+        title='Total Assets Flooded (%)'
+    )
     fig.update_layout(
-        # title={'text': asset_dict[asset],
-        #        'font': {'size': 16},
-        #        'x': 0.5},
         legend=dict(
             title=dict(
                 text='scenario<br>',
@@ -50,40 +41,31 @@ def line_chart(asset: str = 'HOUSING'):
             ),
             tracegroupgap=10
         ),
-        margin=dict(l=0, r=0, t=0, b=0)
+
+        margin=dict(l=10, r=0, t=10, b=0)
     )
     return fig
 
 
-def bar_chart(asset: str = 'HOUSING',
-              scenario: str = 'CAT2',
-              year: int = 2040):
+def bar_chart(asset, scenario, year):
     bar_trace = f"{scenario}_{str(year)}"
-    # if asset != 'HOUSING':
-    asset_title = asset_dict[asset]
-    bar_df = class_df[class_df['Asset Class'] == asset]
-    x_title = f"{asset_title} (%) by flood depth"
-    # else:
-    #     bar_df = class_df
-    #     x_title = f"All critical assets (%) by flood depth"
+    bar_df = flooded_by_depth_df[flooded_by_depth_df['Asset Class'] == asset]
+    x_title = f"Assets Flooded by Depth (%) under {scenario} in {year}"
     fig = px.bar(
-        bar_df, x='Flood depth', y=bar_trace, color='Asset Class',
-        barmode='group', category_orders=category_orders,
+        bar_df, x='Flood depth', y=bar_trace,
+        # color='Asset Class',
+        # barmode='group',
         template='plotly_white',
-        color_discrete_map={
-            'HOUSING': '#0E3183',
-            'TRANSPORTATION': '#0E3183',
-            'CRITICAL INFRASTRUCTURE': '#0E3183',
-            'CRITICAL COMMUNITY AND EMERGENCY FACILITIES': '#0E3183',
-            'NATURAL, CULTURAL, AND HISTORICAL RESOURCES': '#0E3183',
-            'ECONOMY': '#0E3183'
-        },
-        # color_discrete_sequence=['#5289B0', '#AAB543', '#EA9731',
-        #                                   '#838383', '#F6C540', '#D05E33']
+        category_orders={'Flood depth': ['0-1 ft', '1-3 ft', '3-6 ft',
+                                        '6-9 ft', '9-18 ft', '18-27 ft',
+                                        '>27 ft']},
     )
-    fig.update_yaxes(range=[-1, 103],
-                     title=None)
+    fig.update_yaxes(
+        range=[-1, 101],
+        title=None
+    )
     fig.update_xaxes(title=x_title)
+    fig.update_traces(marker_color=color_map[scenario])
     fig.update_layout(
         legend=dict(
             orientation="h",
@@ -92,11 +74,18 @@ def bar_chart(asset: str = 'HOUSING',
             y=1.02,
             xanchor="right",
             x=1,
-            title=None,
-
+            title=None
         ),
         bargroupgap=0.15,
         showlegend=False,
-        margin=dict(l=0, r=0, t=0, b=0)
+        margin=dict(l=20, r=0, t=20, b=0)
+    )
+    fig.add_annotation(
+        x='>27 ft', y=85,
+        # xshift=-40,
+        text=f"{asset_axis_title[asset]}",
+        showarrow=False,
+        yshift=10,
+        font=dict(size=14)
     )
     return fig
