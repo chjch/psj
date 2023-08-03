@@ -56,9 +56,6 @@ def bar_chart(asset, scenario, year):
         # color='Asset Class',
         # barmode='group',
         template='plotly_white',
-        category_orders={'Flood depth': ['0-1 ft', '1-3 ft', '3-6 ft',
-                                        '6-9 ft', '9-18 ft', '18-27 ft',
-                                        '>27 ft']},
     )
     fig.update_yaxes(
         range=[-1, 101],
