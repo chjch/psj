@@ -1,3 +1,8 @@
+document.documentElement.style.setProperty(
+    '--nav-height',
+    document.getElementById("navbar").offsetHeight
+);
+
 const legendTips = {
     "MHHW": "Mean Higher High Water",
     "NFHL100": "FEMA 100-year Flood",
@@ -275,7 +280,7 @@ function createIntroTour() {
     if (window.location.href.includes('viewer/housing')) {
         // Initiate the tour
         // introTour.start();
-        if(!sessionStorage.getItem('shepherd-tour')) {
+        if (!sessionStorage.getItem('shepherd-tour')) {
             introTour.start();
             sessionStorage.setItem('shepherd-tour', 'yes');
         }
