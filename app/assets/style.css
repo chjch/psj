@@ -1,3 +1,7 @@
+:root {
+    --nav-height: 80px;
+}
+
 .pretty_container {
     border-radius: 5px;
     /*background-color: #2E3037;*/
@@ -5,6 +9,13 @@
     padding: 25px;
     position: relative;
     box-shadow: 0 0 2px 2px rgba(0,0,0,0.12);
+}
+
+.pretty_container_expanded {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    /*box-shadow: 0 0 2px 2px rgba(0,0,0,0.12);*/
 }
 
 body {
@@ -18,8 +29,14 @@ body {
 /*}*/
 
 /* map style */
-.map_window {
+.map_viewport {
     height: 78vh;
+    display: flex;
+    position: relative;
+}
+
+.map_viewport_expanded {
+    height: calc(100vh - var(--nav-height));
     display: flex;
     position: relative;
 }
@@ -72,8 +89,8 @@ a.basemap-roadmap {
     background-color: #0E3183;
     width: 41%;
     height: inherit;
-    top: 60px;
-    right: 25px;
+    top: 56px;
+    right: 20px;
     opacity: 1 !important;
     cursor: pointer;
     min-width: 200px;
