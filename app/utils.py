@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import plotly.express as px
-from dash import html
 import dash_bootstrap_components as dbc
 
 
