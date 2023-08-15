@@ -20,14 +20,15 @@ external_stylesheets = [
     'https://cdnjs.cloudflare.com/ajax/libs/shepherd.js/11.1.1/css/shepherd.css',
     "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap",
     dbc.themes.MATERIA,
+    dbc.icons.FONT_AWESOME,  # Font Awesome icons
     # BS
 ]
 
 app = Dash(
     __name__,
     use_pages=True,
-    external_scripts=external_scripts,
-    external_stylesheets=external_stylesheets,
+    externesal_scripts=external_scripts,
+    external_stylheets=external_stylesheets,
     suppress_callback_exceptions=True
 )
 app.title = 'Port St. Joe Dashboard'
