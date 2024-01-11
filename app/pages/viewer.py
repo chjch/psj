@@ -8,7 +8,6 @@ from navbar import navbar
 from slr_deck import slr_scenario
 from charts import line_chart, bar_chart
 from intro import intro_msg
-
 from utils import collapse_component
 
 dash.register_page(
@@ -317,9 +316,25 @@ def expand_map(n):
     if n == 0:
         return no_update
     if n % 2 == 0:
-        return True, True, True, {"width": "95%"}, "pretty_container", "map_viewport", "g-0 px-3"
+        return (
+            True,
+            True,
+            True,
+            {"width": "95%"},
+            "pretty_container",
+            "map_viewport",
+            "g-0 px-3",
+        )
     else:
-        return False, False, False, {"width": "100%"}, "pretty_container_expanded", "map_viewport_expanded", "g-0 px-0"
+        return (
+            False,
+            False,
+            False,
+            {"width": "100%"},
+            "pretty_container_expanded",
+            "map_viewport_expanded",
+            "g-0 px-0",
+        )
 
 
 @callback(Output("intro-message", "children"), [Input("sub-path", "pathname")])
