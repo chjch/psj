@@ -73,7 +73,7 @@ a.basemap-roadmap {
 }
 
 .dropdown {
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 #basemap-dropdown .Select-control {
@@ -347,4 +347,57 @@ th, td {
 
 .legend .asset-level8 {
     background-color: #000000;
+}
+
+@media (max-width: 500px) {
+    .hidden-mobile {
+        display: none;
+    }
+}
+
+.show-mobile, .show-1500 {
+    display: none !important;
+}
+
+@media (max-width: 500px) {
+    .show-mobile {
+        display: flex !important;
+    }
+    .home-logos {
+        height: 90px !important;
+    }
+    h1 {
+        font-size: 2em !important;
+        margin-bottom: 25px !important;
+    }
+}
+
+@media (max-width: 1500px) {
+    .show-1500 {
+        display: flex !important;
+    }
+    .hidden-1500 {
+        display: none !important;
+    }
+}
+
+.info-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    margin: 10px;
+    background-color: #5FCD94;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-title {
+    color: #000000;
 }
