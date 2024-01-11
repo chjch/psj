@@ -41,7 +41,7 @@ app.layout = html.Div(
 
 app.clientside_callback(
     """function () {
-        setTimeout(function() {addListeners()}, 1000);
+        setTimeout(function() {addStormCodePopupDescription()}, 1000);
         setTimeout(function() {createIntroTour()}, 1000);
         return 0;
     }""",
