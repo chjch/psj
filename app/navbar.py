@@ -69,7 +69,7 @@ navbar_right = dbc.Row(
         className="g-0 flex-nowrap mt-3 mt-md-0",
         id="navbar-links-group"
     ),
-    className="ms-auto hidden-1500",
+    className="ms-auto hidden-1500 hidden-mobile",
     # align="center",
 )
 
@@ -101,7 +101,7 @@ dropdown = html.Div(
             ],
             label="Category",
             align_end=True,
-            className="show-1500"
+            className="show-1500 hidden-mobile"
         ),
     ]
 )

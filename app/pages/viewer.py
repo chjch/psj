@@ -22,7 +22,7 @@ chart_panels = dbc.Col(
         html.Div(
             children=[],
             id="intro-message",
-            className="pretty_container",
+            className="pretty_container hidden-mobile",
             style={"height": "25vh", "overflow": "auto"},
         ),
         dcc.Graph(
@@ -30,7 +30,7 @@ chart_panels = dbc.Col(
             id="line-chart",
             responsive=True,
             hoverData=None,
-            className="pretty_container",
+            className="pretty_container chart1",
             config={"displayModeBar": False},
             style={"height": "33vh"},
         ),
@@ -38,11 +38,11 @@ chart_panels = dbc.Col(
             # figure={},
             id="bar-chart",
             responsive=True,
-            className="pretty_container",
+            className="pretty_container chart2",
             style={"height": "28vh"},
         ),
     ],
-    width=4,
+    width=12,
 )
 
 chart_panels = collapse_component(
@@ -206,6 +206,94 @@ basemap_dropdown = dcc.Dropdown(
         "z-index": 1,
     },
 )
+mobile_dropups = dbc.Row(
+    [
+        dbc.ButtonGroup([
+            dbc.DropdownMenu(
+            label="Category",
+            children=[
+                dbc.DropdownMenuItem(
+                    "HOUSING", id="dropdown-button", href="/viewer/housing",
+                ),
+                dbc.DropdownMenuItem(
+                    "TRANSPORTATION", href="/viewer/transportation",
+                ),
+                dbc.DropdownMenuItem(
+                    "CRITICAL INFRASTRUCTURE", href="/viewer/critical-infrastructure",
+                ),
+                dbc.DropdownMenuItem(
+                    "COMMUNITY SERVICES", href="/viewer/community-services",
+                ),
+                dbc.DropdownMenuItem(
+                    "NATURAL & CULTURAL", href="/viewer/natural-cultural-resources",
+                ),
+                dbc.DropdownMenuItem(
+                    "LOCAL ECONOMY", href="/viewer/local-economy",
+                ),
+                dbc.DropdownMenuItem(
+                    "ADAPTATION", href="/viewer/adaptation",
+                )
+            ],
+            direction="up",
+            group=True,
+            toggle_style={"border-radius": "0%"},
+            ),
+            dbc.DropdownMenu(label="Projection Year", children=[
+                dbc.DropdownMenuItem(
+                    "2022", id="dropdown-button", href="/viewer/housing",
+                ),
+                dbc.DropdownMenuItem(
+                    "2040", href="/viewer/transportation",
+                ),
+                dbc.DropdownMenuItem(
+                    "2070", href="/viewer/critical-infrastructure",
+                ),
+            ], 
+            direction="up",
+            toggleClassName="YearDropup",
+            group=True,
+            toggle_style={"border-radius": "0%"},
+            ),
+            dbc.DropdownMenu(label="Scenario", children=[
+                dbc.DropdownMenuItem(
+                    "CAT5", id="dropdown-button", href="/viewer/housing",
+                ),
+                dbc.DropdownMenuItem(
+                    "CAT3", href="/viewer/transportation",
+                ),
+                dbc.DropdownMenuItem(
+                    "CAT1", href="/viewer/critical-infrastructure",
+                ),
+                dbc.DropdownMenuItem(
+                    "NFHL100", id="dropdown-button", href="/viewer/housing",
+                ),
+                dbc.DropdownMenuItem(
+                    "EWL10R", href="/viewer/transportation",
+                ),
+                dbc.DropdownMenuItem(
+                    "EWL2R", href="/viewer/critical-infrastructure",
+                ),
+                dbc.DropdownMenuItem(
+                    "EWL1R", href="/viewer/transportation",
+                ),
+                dbc.DropdownMenuItem(
+                    "MHHW", href="/viewer/critical-infrastructure",
+                ),
+            ], 
+            direction="up",
+            align_end=True,
+            toggleClassName="ScenarioDropup",
+            group=True,
+            toggle_style={"border-radius": "0%"},
+            ),
+        ],
+        className="dropup-group",
+        style={"width": "100%"},
+        ),
+    ],
+    className="dropup-row",
+    justify="evenly",
+)
 
 map_expansion_btn = dbc.Button(
     children=html.I(className="fas fa-expand", id="map-expansion-icon"),
@@ -225,6 +313,21 @@ map_expansion_btn = dbc.Button(
     },
 )
 
+panel_switch_button = dbc.Nav(
+    [
+        dbc.NavItem(dbc.NavLink(
+            html.I(className="fa-solid fa-chevron-up", style={"margin-left":"auto", "margin-right": "auto"}),
+            active=True, 
+            href='#map', 
+            id="switch-panel", 
+            className="switch-panel-button",
+        ),
+        ),
+    ],
+    pills=True,
+    className="switch_panel",
+)
+
 main_map = html.Div(
     children=[],
     id="map",
@@ -242,6 +345,7 @@ map_panel = dbc.Col(
                         map_expansion_btn,
                         basemap_dropdown,
                         map_legend_toast,
+                        panel_switch_button,
                     ],
                     id="map-container",
                     className="pretty_container",
@@ -263,9 +367,25 @@ def layout(asset_type=None):
             dcc.Location(id="sub-path"),
             dbc.Row(navbar),
             dbc.Row(
+                [
+                    dbc.Col(
+                        chart_panels,
+                        width={"size": 4, "order": "first"},
+                        className="mobile-chart-column"
+                        ),
+                    dbc.Col(
+                        map_panel,
+                        className="mobile-map-column",
+                        id="mobile-map-column",
+                        ),
+                ],
                 id="content",
-                children=[chart_panels, map_panel],
                 className="g-0 px-3",
+            ),
+             dbc.Row(
+                id="mobile-dropup-row",
+                children=[mobile_dropups],
+                className="show-mobile",
             ),
         ]
     )
@@ -536,3 +656,13 @@ def toggle_navbar_collapse(n, is_open):
     if n:
         return not is_open
     return is_open
+
+
+callback(
+    Output("example-output", "children"), [Input("example-button", "n_clicks")]
+)
+def on_button_click(n):
+    if n is None:
+        return "Not clicked."
+    else:
+        return f"Clicked {n} times."

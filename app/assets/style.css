@@ -36,7 +36,7 @@ body {
 }
 
 .map_viewport_expanded {
-    height: calc(100vh - var(--nav-height));
+    height: calc(90vh - var(--nav-height));
     display: flex;
     position: relative;
 }
@@ -349,14 +349,22 @@ th, td {
     background-color: #000000;
 }
 
+#mobile-dropup-row {
+    height: 45px;
+    width: auto;
+    padding-top:2px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 @media (max-width: 500px) {
     .hidden-mobile {
-        display: none;
+        display: none !important;
     }
 }
 
 .show-mobile, .show-1500 {
-    display: none !important;
+    display: none;
 }
 
 @media (max-width: 500px) {
@@ -370,9 +378,90 @@ th, td {
         font-size: 2em !important;
         margin-bottom: 25px !important;
     }
+    #map-y-slider-collapse, #map-x-slider-collapse, #map-expansion-btn, .navbar-toggler  {
+        display: none !important;
+    }
+    .map_viewport {
+        height: calc(100vh - var(--nav-height)) !important;
+    }
+    #map-container {
+        margin: 0px;
+        padding: 0px;
+    }
+    #map-panel {
+        width: 100% !important;
+    }
+    .px-3, .ms-2.navbar-brand {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .px-4 {
+        padding-left: 0.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+    .py-3 {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+    .legend-btn {
+        bottom: 15px !important;
+        left: 5px !important;
+    }
+    #basemap-dropdown {
+        top: -10px !important;
+        right: 0px !important;
+    }
+    .g-0 {
+        flex-wrap: wrap;
+    }
+    .mt-3 {
+        top: -10px;
+        left: 10px;
+        width: 50px;
+        height: 30px;
+        position: absolute;
+        z-index: 100;
+    }
+    .dropup-row, .dropup-group {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        justify-content: center;
+    }
+    .dropup {
+        width: 100% !important;
+    }
+    .mobile-chart-column {
+        width: 100% !important;
+    }
+    .mobile-map-column {
+        width: 100% !important;
+        display: inline-block !important;
+        flex: auto !important;
+    }
+    .switch_panel {
+        width: auto !important;
+    }
+    .chart1 {
+        height: 45vh !important;
+    }
+    .chart2 {
+        height: 45vh !important;
+    }
+    .switch-panel-button {
+        height: 35px !important;
+        text-align: center !important;
+        font-size: small !important;
+        background-color: #3a3a3a !important;
+        position: absolute;
+        bottom: 70px;
+        right: 30px;
+        display: inline-block;
+    }
 }
 
-@media (max-width: 1500px) {
+@media (min-width: 500px) and (max-width: 1500px) {
     .show-1500 {
         display: flex !important;
     }
@@ -400,4 +489,8 @@ th, td {
 
 .modal-title {
     color: #000000;
+}
+
+html {
+    scroll-behavior: smooth;
 }
