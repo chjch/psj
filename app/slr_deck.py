@@ -23,7 +23,7 @@ ZOOM = 15.2
 MINZOOM = 12
 MAXZOOM = 18
 
-CESIUM_ASSET_ID = 1704927
+CESIUM_ASSET_ID = 2422314
 
 sun_light = {
     "@@type": "_SunLight",
@@ -203,7 +203,7 @@ def slr_scenario(pathname, scn_code, year, default_mb_style):
         "_subLayerProps": {
             "scenegraph": {
                 "_lighting": "pbr",
-                "getColor": [340, 340, 340, 300],
+                "getColor": [710, 710, 710, 500],
                 "material": {
                     "ambient": 0.5,
                     "diffuse": 0.5,
