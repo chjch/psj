@@ -320,7 +320,7 @@ panel_switch_button = dbc.Nav(
             active=True, 
             href='#map', 
             id="switch-panel", 
-            className="switch-panel-button",
+            className="switch-panel-button show-mobile",
         ),
         ),
     ],
