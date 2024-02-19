@@ -26,6 +26,3 @@ Werkzeug==2.2.2
 
 # Local package in ./src
 ./src/dash_deck-0.0.3.tar.gz
-
-# Required for deployment on Heroku
-gunicorn==20.1.0
