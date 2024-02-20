@@ -25,7 +25,7 @@ icon_data = {
         },
     ],
     "/community-services": [
-        "COMMUNITY AND EMERGENCY FACILITIES",
+        "CRITICAL COMMUNITY AND EMERGENCY FACILITIES",
         {
             "url": "/assets/image/community_service.png",
             "width": 96,
@@ -35,7 +35,7 @@ icon_data = {
         },
     ],
     "/natural-cultural-resources": [
-        "NATURAL/CULTURAL/HISTORICAL RESOURCE",
+        "NATURAL, CULTURAL, AND HISTORICAL RESOURCES",
         {
             "url": "/assets/image/natural_cultural.png",
             "width": 105,
