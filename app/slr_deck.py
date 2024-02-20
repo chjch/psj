@@ -1,4 +1,5 @@
 import pandas as pd
+import pandas as pd
 import json
 
 import dash_deck
@@ -65,14 +66,11 @@ lighting_effect = {
 
 tooltip_transportation_html = """
     <table>
-        <tr>
-            <td><strong>Full Name</strong></td>
-            <td>{Full Name}</td>
-        </tr>
-        <tr>
-            <td><strong>Length (ft)</strong></td>
-            <td>{Length (ft)}</td>
-        </tr>
+        <thead>
+            <th colspan="2">
+                <strong>{Asset Name}</strong>
+            </th>
+        </thead>
         <tr>
             <td><strong>Flood Depth (ft)</strong></td>
             <td>{Flood Depth (ft)}</td>
@@ -82,10 +80,11 @@ tooltip_transportation_html = """
 
 tooltip_housing_html = """
     <table>
-        <tr>
-            <td><strong>Asset Name</strong></td>
-            <td>{Asset Name}</td>
-        </tr>
+        <thead>
+            <th colspan="2">
+                <strong>{Asset Name}</strong>
+            </th>
+        </thead>
         <tr>
             <td><strong>First Floor (FF) Height</strong></td>
             <td>{First Floor Height (ft)}</td>
@@ -99,10 +98,11 @@ tooltip_housing_html = """
 
 tooltip_asset_html = """
     <table>
-        <tr>
-            <td><strong>Asset Name</strong></td>
-            <td>{Asset Name}</td>
-        </tr>
+        <thead>
+            <th colspan="2">
+                <strong>{Asset Name}</strong>
+            </th>
+        </thead>
         <tr>
             <td><strong>Asset Type</strong></td>
             <td>{Asset Type}</td>
@@ -126,7 +126,7 @@ tooltip_style = {
 def road_path_layer_data(scn, year):
     df = pd.read_json(road_json)[
         [
-            "Full Name",
+            "Asset Name",
             "Length (ft)",
             f"{scn}_{year}",
             f"{scn}_{year}_color",
@@ -159,6 +159,31 @@ def bfp_data(scn, year):
     return df.to_json(orient="records")
 
 
+def bldg_3d_data(cesium_asset_id: int, rgba_color: list, html_id: str) -> dict:
+    return {
+        "@@type": "Tile3DLayer",
+        "id": html_id,
+        "loader": "@@#CesiumIonLoader",
+        "opacity": 1,
+        "data": cesium_tile_url(cesium_asset_id),
+        "loadOptions": {
+            "cesium-ion": {"accessToken": cesium_token},
+        },
+        "pickable": False,
+        "_subLayerProps": {
+            "scenegraph": {
+                "_lighting": "pbr",
+                "getColor": rgba_color,
+                "material": {
+                    "ambient": 0.5,
+                    "diffuse": 0.5,
+                    "specularColor": [255, 255, 255],
+                },
+            }
+        },
+    }
+
+
 def slr_scenario(pathname, scn_code, year, default_mb_style):
     bfp_layer = {
         "@@type": "GeoJsonLayer",
@@ -189,30 +214,6 @@ def slr_scenario(pathname, scn_code, year, default_mb_style):
         "id": f"slr-tile-{scn_code}-{year}",
         "opacity": 0.8,
     }
-
-    bldg_3d_layer = {
-        "@@type": "Tile3DLayer",
-        "id": "bldg-3d",
-        "loader": "@@#CesiumIonLoader",
-        "opacity": 1,
-        "data": cesium_tile_url(CESIUM_ASSET_ID),
-        "loadOptions": {
-            "cesium-ion": {"accessToken": cesium_token},
-        },
-        "pickable": False,
-        "_subLayerProps": {
-            "scenegraph": {
-                "_lighting": "pbr",
-                "getColor": [710, 710, 710, 500],
-                "material": {
-                    "ambient": 0.5,
-                    "diffuse": 0.5,
-                    "specularColor": [255, 255, 255],
-                },
-            }
-        },
-    }
-
     road_segment_layer = {
         "@@type": "PathLayer",
         "data": json.loads(road_path_layer_data(scn_code, year)),
@@ -226,23 +227,40 @@ def slr_scenario(pathname, scn_code, year, default_mb_style):
         "widthMinPixels": 1,
         "widthScale": 5,
     }
-
     if pathname == "/transportation":
         layers = [
             slr_tile_layer,
             road_segment_layer,
+            bldg_3d_data(
+                2422314,  # housing buildings
+                [710, 710, 710, 150],
+                "bldg-3d-housing"
+            ),
             asset_points_layer(scn_code, year, pathname),
         ]
         tooltip_html = tooltip_transportation_html
         if not default_mb_style:
-            default_mb_style = "Satellite"
+            default_mb_style = "Roadmap"
     elif pathname == "/housing" or pathname == "/":
-        layers = [slr_tile_layer, bldg_3d_layer, bfp_layer]
+        layers = [
+            slr_tile_layer,
+            bldg_3d_data(
+                2422314,  # housing buildings
+                [710, 710, 710, 500],
+                "bldg-3d-housing"
+            ),
+            bfp_layer
+        ]
         tooltip_html = tooltip_housing_html
     else:
         layers = [
             slr_tile_layer,
             # bfp_asset_layer,
+            bldg_3d_data(
+                2422314,  # housing buildings
+                [710, 710, 710, 150],
+                "bldg-3d-housing"
+            ),
             asset_points_layer(scn_code, year, pathname),
         ]
         tooltip_html = tooltip_asset_html
@@ -270,6 +288,15 @@ def slr_scenario(pathname, scn_code, year, default_mb_style):
     return dash_deck.DeckGL(
         json_data,
         id="terrain-deck",
-        tooltip={"html": tooltip_html, "style": tooltip_style},
+        tooltip={
+            "html": tooltip_html,
+            "style": {
+                "font-size": "14px",
+                "background-color": "rgba(255, 255, 255, 0.83)",
+                # "padding": "5px 5px 5px 5px",
+                "border-radius": "5px",
+                "z-index": 1000,
+            }
+        },
         mapboxKey=mapbox_token,
     )
