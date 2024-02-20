@@ -349,6 +349,7 @@ map_panel = dbc.Col(
                     ],
                     id="map-container",
                     className="pretty_container",
+                    style={"z-index": "100"},
                 ),
                 map_x_slider,
             ],
