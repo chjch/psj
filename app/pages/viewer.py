@@ -178,10 +178,10 @@ map_legend_toast = html.Div(
         ),
     ],
     style={
-        "bottom": "70px",
+        "bottom": "60px",
         "left": "45px",
-        "width": "15%",
-        "max-width": "200px",
+        "width": "20%",
+        "max-width": "250px",
         "min-width": "160px",
         "height": "auto",
         "position": "absolute",
@@ -604,6 +604,8 @@ def update_map_legend_content(pathname):
             html.Li([html.Span(className="tile-level7"), "18.1 - 27 ft"]),
             html.Li([html.Span(className="tile-level8"), "> 27 ft"]),
         ], "Depth of flooding"
+    elif pathname == "/adaptation":
+        return html.Img(src="/assets/image/AdaptLegend.png"), "Adaptation Plan"
     else:
         return [
             html.P(
@@ -671,14 +673,14 @@ def hide_map_expand_btn(pathname):
         return "d-none"
 
 
-@callback(
-    Output("legend-button", "className"),
-    [Input("sub-path", "pathname")],
-)
-def hide_legend_button(pathname):
-    pathname = "/" + pathname.split("/")[-1]
-    if pathname == "/adaptation":
-        return "d-none"
+# @callback(
+#     Output("legend-button", "className"),
+#     [Input("sub-path", "pathname")],
+# )
+# def hide_legend_button(pathname):
+#     pathname = "/" + pathname.split("/")[-1]
+#     if pathname == "/adaptation":
+#         return "d-none"
 
 
 # add callback for toggling the collapse on small screens
