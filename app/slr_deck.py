@@ -1,5 +1,4 @@
 import pandas as pd
-import pandas as pd
 import json
 
 import dash_deck
@@ -214,6 +213,17 @@ def slr_scenario(pathname, scn_code, year, default_mb_style):
         "id": f"slr-tile-{scn_code}-{year}",
         "opacity": 0.8,
     }
+    adapt_plan_layer = {
+        "@@type": "MyTileLayer",
+        "data": (
+            "https://tiles.arcgis.com/tiles/LBbVDC0hKPAnLRpO/arcgis/"
+            "rest/services/PSJ_adaptation_plan/MapServer/WMTS/tile/"
+            "1.0.0/PSJ_adaptation_plan/default/default028mm"
+            "/{z}/{y}/{x}.png"
+        ),
+        "id": "adaptation-plan",
+        "opacity": 1,
+    }
     road_segment_layer = {
         "@@type": "PathLayer",
         "data": json.loads(road_path_layer_data(scn_code, year)),
@@ -250,6 +260,17 @@ def slr_scenario(pathname, scn_code, year, default_mb_style):
                 "bldg-3d-housing"
             ),
             bfp_layer
+        ]
+        tooltip_html = tooltip_housing_html
+    elif pathname == "/adaptation":  # pathname == "/adaptation":
+        layers = [
+            adapt_plan_layer,
+            bldg_3d_data(
+                2422314,  # all buildings
+                [710, 710, 710, 220],
+                "bldg-3d-transport"
+            ),
+            bfp_layer,
         ]
         tooltip_html = tooltip_housing_html
     else:

@@ -431,9 +431,23 @@ def update_map(pathname, x_value, y_value, basemap):
         Output("map", "className"),
         Output("content", "className")
     ],
-    [Input("map-expansion-btn", "n_clicks")],
+    [
+        Input("map-expansion-btn", "n_clicks"),
+        Input("sub-path", "pathname")
+    ],
 )
-def expand_map(n):
+def expand_map(n, pathname):
+    pathname = "/" + pathname.split("/")[-1]
+    if pathname == "/adaptation":
+        return (
+            False,
+            False,
+            False,
+            {"width": "100%"},
+            "pretty_container_expanded",
+            "map_viewport_expanded",
+            "g-0 px-0",
+        )
     if n == 0:
         return no_update
     if n % 2 == 0:
@@ -645,6 +659,26 @@ def toggle_map_expand_btn(is_open):
         return "fas fa-expand"
     else:
         return "fas fa-compress"
+
+
+@callback(
+    Output("map-expansion-btn", "className"),
+    [Input("sub-path", "pathname")],
+)
+def hide_map_expand_btn(pathname):
+    pathname = "/" + pathname.split("/")[-1]
+    if pathname == "/adaptation":
+        return "d-none"
+
+
+@callback(
+    Output("legend-button", "className"),
+    [Input("sub-path", "pathname")],
+)
+def hide_legend_button(pathname):
+    pathname = "/" + pathname.split("/")[-1]
+    if pathname == "/adaptation":
+        return "d-none"
 
 
 # add callback for toggling the collapse on small screens
