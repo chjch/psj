@@ -497,7 +497,7 @@ def update_intro_msg(pathname):
 )
 def update_line_chart(pathname, y_value):
     pathname = "/" + pathname.split("/")[-1]
-    if pathname == "/housing":
+    if pathname == "/housing" or pathname == "/adaptation":
         return line_chart(
             "HOUSING",
             y_slider_marks[y_value]["label"],
@@ -548,7 +548,7 @@ def update_bar_chart(hoverdata, pathname, y_value, x_value):
     else:
         year = hoverdata["points"][0]["x"]
         scenario = hoverdata["points"][0]["customdata"][0]
-    if pathname == "/housing":
+    if pathname == "/housing" or pathname == "/adaptation":
         return bar_chart("HOUSING", scenario, year)
     elif pathname == "/critical-infrastructure":
         return bar_chart("CRITICAL INFRASTRUCTURE", scenario, year)
